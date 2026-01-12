@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
-from routers import teacher, admin
+from routers import teacher, admin, ai
 
 load_dotenv()
 
@@ -22,6 +22,7 @@ app.add_middleware(
 
 app.include_router(teacher.router, prefix="/api/teacher", tags=["teacher"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
+app.include_router(ai.router) # This will expose /chat at root
 
 @app.get("/")
 async def root():
