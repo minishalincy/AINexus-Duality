@@ -10,6 +10,9 @@ DB = CLIENT.assist_ai
 
 teacher_collection = DB.teachers
 admin_collection = DB.admins
+notes_collection = DB.notes
+tasks_collection = DB.tasks
+subjects_collection = DB.subjects
 
 async def get_database():
     return DB

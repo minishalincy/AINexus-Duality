@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home, Video, Sparkles, BarChart, Users } from 'lucide-react';
+import { Home, Video, Sparkles, BarChart, Users, Mic } from 'lucide-react';
 import TeacherNavbar from '@/components/TeacherNavbar';
 import DashboardCard from '@/components/DashboardCard';
 import { useLanguage } from '@/context/LanguageContext';
@@ -23,6 +23,7 @@ export default function TeacherDashboard() {
 
     const items = [
         { title: t('dashboard_home'), icon: Home, href: '/teacher/dashboard', description: "Main dashboard landing" },
+        { title: "Daily Feedback", icon: Mic, href: '/teacher/daily-feedback', description: "Share your day in 1 minute" },
         { title: t('mini_module_recordings'), icon: Video, href: '/teacher/recordings', description: "View recorded content", comingSoon: true },
         { title: t('ai_assistant'), icon: Sparkles, href: '/teacher/ai', description: "Chat with Assist AI" },
         { title: t('insights'), icon: BarChart, href: '/teacher/insights', description: "Analytics & reports", comingSoon: true },

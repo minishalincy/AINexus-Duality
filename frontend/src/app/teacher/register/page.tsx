@@ -51,7 +51,7 @@ export default function TeacherRegister() {
             // Store token and redirect
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('role', 'teacher');
-            router.push('/teacher/dashboard');
+            router.push('/dashboard');
 
         } catch (error: any) {
             console.error(error);

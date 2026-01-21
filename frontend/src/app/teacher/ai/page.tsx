@@ -108,7 +108,14 @@ export default function AIWorkspace() {
         }
     }
 
-    function startListening() {
+    const recognitionRef = useRef<any>(null);
+
+    function toggleListening() {
+        if (isListening) {
+            recognitionRef.current?.stop();
+            return; // onend will handle state update
+        }
+
         const windowWithSpeech = window as unknown as IWindow;
         const SpeechRecognition = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
 
@@ -121,12 +128,14 @@ export default function AIWorkspace() {
         recognition.lang = LANG_MAP[selectedLanguage];
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
+        recognition.continuous = true;
 
         recognition.onstart = () => setIsListening(true);
 
         recognition.onresult = (e: any) => {
-            const text = e.results[0][0].transcript;
-            setInput((prev) => prev ? `${prev} ${text}` : text);
+            const current = e.resultIndex;
+            const transcript = e.results[current][0].transcript;
+            setInput((prev) => prev ? `${prev} ${transcript}` : transcript);
         };
 
         recognition.onerror = (e: any) => {
@@ -136,6 +145,7 @@ export default function AIWorkspace() {
 
         recognition.onend = () => setIsListening(false);
 
+        recognitionRef.current = recognition;
         recognition.start();
     }
 
@@ -258,12 +268,12 @@ export default function AIWorkspace() {
 
                             {/* Voice Button */}
                             <button
-                                onClick={startListening}
+                                onClick={toggleListening}
                                 className={`p-3 rounded-full transition-all duration-300 ${isListening
                                     ? "bg-red-50 text-red-600 animate-pulse ring-2 ring-red-200"
                                     : "text-gray-500 hover:text-primary-600 hover:bg-gray-50"
                                     }`}
-                                title={isListening ? "Listening..." : "Start Voice Input"}
+                                title={isListening ? "Stop Recording" : "Start Voice Input"}
                             >
                                 {isListening ? <StopCircle className="w-6 h-6" /> : <Mic className="w-5 h-5" />}
                             </button>

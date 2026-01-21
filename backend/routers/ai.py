@@ -1,7 +1,9 @@
 import os
 import requests
+import json
 from fastapi import APIRouter, Form, UploadFile, File, HTTPException
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from langdetect import detect, LangDetectException
 from dotenv import load_dotenv
 from typing import Optional
@@ -15,25 +17,50 @@ router = APIRouter()
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 HF_KEY = os.getenv("HF_API_KEY")
 
-# Configure Gemini
-if not GEMINI_KEY:
-    print("Warning: GEMINI_API_KEY not found in env")
+# Initialize Gemini Client
+client = None
+if GEMINI_KEY:
+    try:
+        client = genai.Client(api_key=GEMINI_KEY)
+    except Exception as e:
+        print(f"Gemini Client Init Error: {e}")
 else:
-    genai.configure(api_key=GEMINI_KEY)
+    print("Warning: GEMINI_API_KEY not found in env")
 
+# Prompts
 SYSTEM_PROMPT = """
-You are TeacherAI.
+AI Teaching Assistant (Instant Classroom Help)
 
-Rules:
-- Answer ONLY teacher-related questions.
-- Give exactly 5 short bullet points.
-- Each bullet must be one short sentence.
-- Do not write paragraphs.
+Your Goal: Give teachers a 5-second answer they can use IMMEDIATELY in class.
+Constraint: MAX 5 LINES. No long paragraphs.
 
-If not teaching-related, reply:
-"I am a teacher-only AI. Please ask a question related to teaching or classrooms."
+Mandatory Structure:
+1. 💡 Simple Concept: One sentence, no jargon.
+2. 🎒 Quick Action: One physical demo using specific classroom items (pen, paper, board, students). BE SPECIFIC on what to move or show.
+
+Example Request: "Explain Friction."
+Example Output:
+💡 Friction is the 'grip' that stops things from sliding forever.
+🎒 Activity: Have a student slide a book on the smooth desk (easy), then slide it on a rough bag (hard).
 """
 
+# ... (rest of file until chat function end)
+
+
+REFLECTION_SYSTEM_PROMPT = """
+You are a supportive senior teacher mentor.
+Analyze the teacher's reflection and output a JSON response with these exact keys:
+{
+  "acknowledgement": "One sentence celebrating a success.",
+  "deep_dive": "A detailed solution for the main issue mentioned.",
+  "quick_fix": "A short, immediate action for a secondary issue.",
+  "tomorrow_prep": "One tip to prepare for tomorrow.",
+  "pro_tip": "A short, clever teaching hack."
+}
+Tone: Encouraging, practical, and concise.
+"""
+
+# Translation Config
 HF_HEADERS = {"Authorization": f"Bearer {HF_KEY}"}
 
 LANG_MAP = {
@@ -43,7 +70,6 @@ LANG_MAP = {
 }
 
 def translate(text, model, src_lang, tgt_lang):
-    # Updated URL to the router endpoint
     url = f"https://router.huggingface.co/models/{model}"
     payload = {
         "inputs": text,
@@ -70,23 +96,36 @@ def to_english(text, lang):
     if lang == "en":
         return text
     src_code = LANG_MAP.get(lang, "kan_Knda") 
-    # Model: NLLB
     return translate(text, "facebook/nllb-200-distilled-600M", src_code, "eng_Latn")
 
 def from_english(text, lang):
     if lang == "en":
         return text
     tgt_code = LANG_MAP.get(lang, "kan_Knda")
-    # Model: NLLB
     return translate(text, "facebook/nllb-200-distilled-600M", "eng_Latn", tgt_code)
+
+def translate_json(data, lang):
+    if lang == "en":
+        return data
+    translated = {}
+    for key, value in data.items():
+        if isinstance(value, str):
+            translated[key] = from_english(value, lang)
+        else:
+            translated[key] = value
+    return translated
 
 @router.post("/chat")
 async def chat(
     message: Optional[str] = Form(None), 
     image: Optional[UploadFile] = File(None),
-    language: Optional[str] = Form("en")
+    language: Optional[str] = Form("en"),
+    mode: Optional[str] = Form("chat")
 ):
     try:
+        if not client:
+             return {"reply": "Server misconfiguration: API Key missing or Client failed."}
+
         if not message and not image:
             return {"reply": "Please provide a message or an image."}
 
@@ -95,65 +134,54 @@ async def chat(
         english_message = ""
         
         if message:
-            # Only use detection if language is not explicitly provided or is 'en' (optional fallback logic)
-            # But the user explicitly selects language in UI, so we should trust 'language' param if it's not 'en'
-            # Or just trust it completely if valid.
-            
-            # If the user selected 'en' but types in Kannada, maybe we should still detect? 
-            # User requirement: "i changed the language to kannada... make it work".
-            # So if specific lang provided, use it.
-            
-            if lang == "en":
-                 try:
-                    detected = detect(message)
-                    if detected in LANG_MAP:
-                        lang = detected
-                 except:
-                    pass
-
             english_message = to_english(message, lang)
 
-        # 2. Prepare Gemini Model
-        # Try a generally available model alias
-        model_name = 'gemini-flash-latest'
-        
-        try:
-             model = genai.GenerativeModel(model_name)
-        except Exception:
-             print(f"Model {model_name} not found, trying fallback.")
-             model = genai.GenerativeModel('gemini-pro')
-
+        # 2. Prepare Content
         chat_content = []
-        chat_content.append(SYSTEM_PROMPT)
-        if english_message:
+        
+        if mode == "reflection":
+            chat_content.append(REFLECTION_SYSTEM_PROMPT)
+            chat_content.append(f"Teacher Reflection:\n{english_message}")
+            if image:
+                 chat_content.append("(Context image provided)")
+        else:
+            chat_content.append(SYSTEM_PROMPT)
             chat_content.append(f"Teacher question:\n{english_message}")
 
         if image:
             try:
-                # Read image
                 img_data = await image.read()
-                # Open with PIL to verify/format
                 img = Image.open(BytesIO(img_data))
                 chat_content.append(img)
-                chat_content.append("(An image was also provided by the teacher)")
             except Exception as e:
                 print(f"Image processing error: {e}")
-                return {"reply": "Error processing image."}
 
         # 3. Generate Content
-        response = model.generate_content(chat_content)
+        config = None
+        if mode == "reflection":
+            config = types.GenerateContentConfig(
+                response_mime_type="application/json"
+            )
+
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=chat_content,
+            config=config
+        )
         
         # 4. Process Response
         generated_text = response.text.strip()
-        lines = [l for l in generated_text.split("\n") if l.strip()]
-        # Take first 5 lines per rules
-        limited_lines = lines[:5]
-        english_answer = "\n".join(limited_lines)
 
-        # 5. Translate Back
-        final_reply = from_english(english_answer, lang)
-        
-        return {"reply": final_reply}
+        if mode == "reflection":
+            try:
+                json_response = json.loads(generated_text)
+                final_reply = translate_json(json_response, lang)
+                return {"reply": final_reply, "type": "json"}
+            except json.JSONDecodeError:
+                return {"reply": {"acknowledgement": generated_text}, "type": "json"}
+        else:
+            final_reply = from_english(generated_text, lang)
+            return {"reply": final_reply, "type": "text"}
 
     except Exception as e:
         print(f"Chat Error: {e}")

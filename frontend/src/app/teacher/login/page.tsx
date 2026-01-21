@@ -48,7 +48,7 @@ export default function TeacherLogin() {
                 setLanguage(data.preferred_language);
             }
 
-            router.push('/teacher/dashboard');
+            router.push('/dashboard');
 
         } catch (error: any) {
             console.error(error);
