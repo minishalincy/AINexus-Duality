@@ -17,7 +17,7 @@ export default function DashboardLayout({
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             {/* Main Content Area - Shifted right by sidebar width and down by navbar height */}
-            <main className="md:ml-64 ml-0 pt-36 min-h-screen px-4 pb-4 md:px-8 md:pb-8 transition-all duration-300">
+            <main className="md:ml-64 ml-0 pt-24 min-h-screen px-4 pb-4 md:px-8 md:pb-8 transition-all duration-300">
                 <div className="max-w-7xl mx-auto">
                     {children}
                 </div>

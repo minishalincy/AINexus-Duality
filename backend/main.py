@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
-from routers import teacher, admin, ai, dashboard
+from routers import teacher, admin, ai, dashboard, calendar, feedback
 
 load_dotenv()
 
@@ -25,6 +25,8 @@ app.add_middleware(
 app.include_router(teacher.router, prefix="/api/teacher", tags=["teacher"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
+app.include_router(calendar.router, prefix="/api/calendar", tags=["calendar"])
+app.include_router(feedback.router, prefix="/api/feedback", tags=["feedback"])
 app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 
 @app.get("/")

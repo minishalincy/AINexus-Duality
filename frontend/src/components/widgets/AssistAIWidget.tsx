@@ -134,7 +134,7 @@ export default function AssistAIWidget() {
 
     return (
         <>
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 max-w-2xl mx-auto">
+            <div className="bg-white rounded-3xl p-6 shadow-md border border-gray-100 w-full mx-auto hover:shadow-lg transition-shadow duration-300">
                 {/* Input Bar */}
                 <div
                     onClick={() => setIsOpen(true)}

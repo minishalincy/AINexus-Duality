@@ -69,9 +69,9 @@ export default function MyClassroomPage() {
                 });
                 newClasses.push(newClass);
             }
-            
+
             setClassrooms(prev => [...prev, ...newClasses]);
-            
+
             // "When the teacher adds subjects, the first added subject card must be automatically selected by default"
             if (newClasses.length > 0 && (!selectedClassroom || classrooms.length === 0)) {
                 setSelectedClassroom(newClasses[0]);
@@ -92,10 +92,10 @@ export default function MyClassroomPage() {
 
     const handleDeleteClass = async (id: string) => {
         if (!confirm(t('confirm_delete_class') || "Are you sure you want to delete this class?")) return;
-        
+
         try {
             await ClassroomService.deleteClassroom(id);
-            
+
             setClassrooms(prev => {
                 const updated = prev.filter(c => c.id !== id);
                 // If we deleted the selected classroom, select another one if available
@@ -122,18 +122,18 @@ export default function MyClassroomPage() {
         // Ensure grade is treated as a string key
         const gradeKey = String(cls.grade);
         const gradeData = SYLLABUS_DATA[gradeKey];
-        
+
         if (gradeData && gradeData[cls.subject]) {
             return gradeData[cls.subject];
         }
-        
+
         // Debug fallback
         console.warn(`Syllabus not found for Grade: ${cls.grade} (${typeof cls.grade}), Subject: ${cls.subject}`);
         return DEFAULT_SYLLABUS;
     };
 
     return (
-        <div className="p-8 max-w-7xl mx-auto space-y-8 min-h-screen">
+        <div className="space-y-8 min-h-screen">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -179,7 +179,7 @@ export default function MyClassroomPage() {
                                     onDelete={() => handleDeleteClass(cls.id)}
                                 />
                             ))}
-                            
+
                             {/* Add Button in the list flow */}
                             <button
                                 onClick={() => setIsModalOpen(true)}
@@ -196,16 +196,16 @@ export default function MyClassroomPage() {
                         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                             {/* Syllabus Tracker */}
                             <div className="space-y-6">
-                                <SyllabusTracker 
+                                <SyllabusTracker
                                     key={selectedClassroom.id}
                                     classroomId={selectedClassroom.id}
                                     syllabus={getSyllabus(selectedClassroom)}
                                     initialCompletedChapters={selectedClassroom.completed_chapters || []}
                                     onUpdateProgress={(chapters) => {
                                         // Optimistic update
-                                        setClassrooms(prev => prev.map(c => 
-                                            c.id === selectedClassroom.id 
-                                                ? { ...c, completed_chapters: chapters } 
+                                        setClassrooms(prev => prev.map(c =>
+                                            c.id === selectedClassroom.id
+                                                ? { ...c, completed_chapters: chapters }
                                                 : c
                                         ));
                                         ClassroomService.updateProgress(selectedClassroom.id, chapters);

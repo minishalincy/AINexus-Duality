@@ -65,8 +65,8 @@ export default function RoleSelection() {
                                 <ShieldCheck className="w-8 h-8 text-secondary-600" />
                             </div>
                             <div className="text-left">
-                                <h3 className="text-xl font-bold text-gray-900">{t('admin')}</h3>
-                                <p className="text-gray-500 text-sm">{t('admin_desc')}</p>
+                                <h3 className="text-xl font-bold text-gray-900">CRP / BRP / ARP</h3>
+                                {/* <p className="text-gray-500 text-sm">{t('admin_desc')}</p> Removed desc as requested */}
                             </div>
                         </motion.button>
                     </div>

@@ -1,32 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mic, FileText } from "lucide-react";
 import ReflectionModal from "./ReflectionModal";
 import { useTranslation } from "react-i18next";
-
-const STATIC_NOTES = [
-    { id: 1, date: "Oct 24", preview: "Science class was chaotic during lab...", type: "Critical" },
-    { id: 2, date: "Oct 23", preview: "Students struggled with Algebra basics.", type: "Observation" },
-    { id: 3, date: "Oct 22", preview: "Great engagement during History quiz!", type: "Success" }
-];
+import { FeedbackService, FeedbackItem } from "@/services/feedback";
 
 export default function FeedbackNotes() {
     const { t } = useTranslation();
     const [modalOpen, setModalOpen] = useState(false);
-    const [notes, setNotes] = useState(STATIC_NOTES);
+    const [notes, setNotes] = useState<FeedbackItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleSaveNote = (noteData: { text: string, data: any }) => {
-        setNotes([
-            {
-                id: Date.now(),
-                date: "Today",
-                preview: noteData.text.substring(0, 40) + "...",
-                type: t("ai_insight")
-            },
-            ...notes
-        ]);
+    const [resultData, setResultData] = useState<FeedbackItem | null>(null);
+
+    // Fetch Notes
+    useEffect(() => {
+        loadNotes();
+
+        // Listener to open modal with result
+        const handleOpenResult = (e: CustomEvent<FeedbackItem>) => {
+            console.log("Opening result modal for:", e.detail.id);
+            setResultData(e.detail);
+            setModalOpen(true);
+        };
+
+        window.addEventListener('open-feedback-result', handleOpenResult as EventListener);
+        return () => window.removeEventListener('open-feedback-result', handleOpenResult as EventListener);
+    }, []);
+
+    const loadNotes = async () => {
+        try {
+            const data = await FeedbackService.getList();
+            setNotes(data);
+        } catch (error) {
+            console.error("Failed to load feedback", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSaveNote = (newItem: FeedbackItem) => {
+        // Prepend new item
+        setNotes([newItem, ...notes]);
     };
 
     return (
@@ -36,23 +52,32 @@ export default function FeedbackNotes() {
                 <span className="text-xs bg-white/60 px-2 py-1 rounded-full text-secondary-dark font-medium border border-white">{t('recent_badge')}</span>
             </div>
 
-            <div className="flex-1 space-y-3 mb-6">
-                {notes.slice(0, 3).map(note => (
-                    <div key={note.id} className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 cursor-pointer hover:border-primary-accent transition-colors">
-                        <div className="w-10 h-10 rounded-full bg-soft-bg flex items-center justify-center text-primary-dark shrink-0">
-                            <FileText size={18} />
+            <div className="flex-1 space-y-3 mb-6 overflow-y-auto max-h-[300px] custom-scrollbar">
+                {loading ? (
+                    <div className="text-center text-gray-400 text-sm py-4">Loading feedback...</div>
+                ) : notes.length === 0 ? (
+                    <div className="text-center text-gray-400 text-sm py-4">No feedback yet. Record your first note!</div>
+                ) : (
+                    notes.slice(0, 5).map(note => ( // Show top 5
+                        <div key={note.id} onClick={() => { setResultData(note); setModalOpen(true); }} className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 cursor-pointer hover:border-primary-accent transition-colors">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 
+                                ${note.type === 'Critical' ? 'bg-red-50 text-red-600' :
+                                    note.type === 'Success' ? 'bg-green-50 text-green-600' :
+                                        'bg-blue-50 text-blue-600'}`}>
+                                <FileText size={18} />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium text-gray-800 line-clamp-1">{note.preview}</p>
+                                <p className="text-xs text-gray-500">{note.date} • {note.type}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-sm font-medium text-gray-800 line-clamp-1">{note.preview}</p>
-                            <p className="text-xs text-gray-500">{note.date} • {note.type}</p>
-                        </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             <button
-                onClick={() => setModalOpen(true)}
-                className="w-full py-3 bg-orange-300/20 text-orange-700 font-bold rounded-xl border border-orange-200 hover:bg-orange-300/40 transition-colors flex items-center justify-center gap-2"
+                onClick={() => { setResultData(null); setModalOpen(true); }}
+                className="w-full py-3 bg-orange-300/20 text-orange-700 font-bold rounded-xl border border-orange-200 hover:bg-orange-300/40 transition-colors flex items-center justify-center gap-2 shrink-0"
             >
                 {t('add_voice_note')} <Mic size={18} />
             </button>
@@ -61,6 +86,7 @@ export default function FeedbackNotes() {
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onSave={handleSaveNote}
+                initialData={resultData}
             />
         </div>
     );

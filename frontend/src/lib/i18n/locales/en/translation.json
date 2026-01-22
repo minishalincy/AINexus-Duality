@@ -34,7 +34,9 @@
   "assist_ai": "Assist AI",
   "notifications": "Notifications",
   "edit_profile": "Edit Profile",
-  "good_morning": "Good Morning, Teacher",
+  "good_morning": "Good Morning",
+  "good_afternoon": "Good Afternoon",
+  "good_evening": "Good Evening",
   "inspire_msg": "Ready to inspire your students today?",
   "add_class_subject": "ADD CLASS AND SUBJECT",
   "add_class_modal_title": "Add Class & Subject",
@@ -115,5 +117,7 @@
   "register.email": "Email Address",
   "register.school": "School",
   "save_changes": "Save Changes",
-  "nav.logout": "Log Out"
+  "nav.logout": "Log Out",
+  "nav.editProfile": "Edit Profile",
+  "profile_picture_hint": "Click to upload a new photo"
 }

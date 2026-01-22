@@ -106,18 +106,7 @@ export default function AdminLogin() {
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('school')}</label>
-                            <select
-                                required
-                                value={formData.school}
-                                onChange={(e) => setFormData({ ...formData, school: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                            >
-                                <option value="">{t('select_school')}</option>
-                                {schools.map(s => <option key={s} value={s}>{s}</option>)}
-                            </select>
-                        </div>
+                        {/* School Removed from UI as per request */}
 
                         {error && (
                             <p className="text-red-500 text-xs mt-1 text-left">{error}</p>

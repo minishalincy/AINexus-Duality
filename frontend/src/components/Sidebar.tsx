@@ -18,7 +18,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <>
             {/* Mobile Backdrop */}
             {isOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 z-30 md:hidden"
                     onClick={onClose}
                 />
@@ -36,64 +36,53 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         </button>
                     </div>
                     <nav className="space-y-2 px-4">
-                    <Link
-                        href="/dashboard"
-                        prefetch={false}
-                        onClick={onClose}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/dashboard"
-                            ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                            : "hover:bg-secondary-dark/50"
-                            }`}
-                    >
-                        <LayoutDashboard size={20} className="text-light-accent" />
-                        <span>{t('dashboard')}</span>
-                    </Link>
-                    <Link
-                        href="/my-classroom"
-                        prefetch={false}
-                        onClick={onClose}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/my-classroom"
-                            ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                            : "hover:bg-secondary-dark/50"
-                            }`}
-                    >
-                        <School size={20} className="text-light-accent" />
-                        <span>{t('my_classroom')}</span>
-                    </Link>
-                    <Link
-                        href="/mini-modules"
-                        prefetch={false}
-                        onClick={onClose}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/mini-modules"
-                            ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                            : "hover:bg-secondary-dark/50"
-                            }`}
-                    >
-                        <PlayCircle size={20} className="text-light-accent" />
-                        <span>{t('watch_mini_modules')}</span>
-                    </Link>
-                    <Link
-                        href="/dashboard/analytics"
-                        prefetch={false}
-                        onClick={onClose}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors opacity-70 cursor-not-allowed hover:bg-transparent ${pathname === "/dashboard/analytics"
-                            ? "bg-secondary-dark font-medium"
-                            : ""
-                            }`}
-                    >
-                        <BarChart2 size={20} />
-                        <span>{t('analytics')}</span>
-                    </Link>
-                </nav>
-            </div>
+                        <Link
+                            href="/dashboard"
+                            prefetch={false}
+                            onClick={onClose}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/dashboard"
+                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
+                                : "hover:bg-secondary-dark/50"
+                                }`}
+                        >
+                            <LayoutDashboard size={20} className="text-light-accent" />
+                            <span>{t('dashboard')}</span>
+                        </Link>
+                        <Link
+                            href="/my-classroom"
+                            prefetch={false}
+                            onClick={onClose}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/my-classroom"
+                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
+                                : "hover:bg-secondary-dark/50"
+                                }`}
+                        >
+                            <School size={20} className="text-light-accent" />
+                            <span>{t('my_classroom')}</span>
+                        </Link>
+                        <Link
+                            href="/mini-modules"
+                            prefetch={false}
+                            onClick={onClose}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/mini-modules"
+                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
+                                : "hover:bg-secondary-dark/50"
+                                }`}
+                        >
+                            <PlayCircle size={20} className="text-light-accent" />
+                            <span>{t('watch_mini_modules')}</span>
+                        </Link>
 
-            <div className="p-4 mb-4">
-                <button className="flex items-center gap-3 px-4 py-3 w-full text-left bg-logout-red text-white rounded-lg hover:opacity-90 transition-opacity font-medium shadow-md">
-                    <LogOut size={20} />
-                    <span>{t('logout')}</span>
-                </button>
-            </div>
-        </aside>
+                    </nav>
+                </div>
+
+                <div className="p-4 mb-4">
+                    <button className="flex items-center gap-3 px-4 py-3 w-full text-left bg-logout-red text-white rounded-lg hover:opacity-90 transition-opacity font-medium shadow-md">
+                        <LogOut size={20} />
+                        <span>{t('logout')}</span>
+                    </button>
+                </div>
+            </aside>
         </>
     );
 }
