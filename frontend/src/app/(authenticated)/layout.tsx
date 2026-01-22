@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import TopNavbar from "@/components/TopNavbar";
 import Sidebar from "@/components/Sidebar";
 
@@ -8,13 +9,15 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     return (
         <div className="min-h-screen bg-soft-bg">
-            <TopNavbar />
-            <Sidebar />
+            <TopNavbar onMenuClick={() => setSidebarOpen(true)} />
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             {/* Main Content Area - Shifted right by sidebar width and down by navbar height */}
-            <main className="ml-64 pt-20 min-h-screen p-8 transition-all duration-300">
+            <main className="md:ml-64 ml-0 pt-36 min-h-screen px-4 pb-4 md:px-8 md:pb-8 transition-all duration-300">
                 <div className="max-w-7xl mx-auto">
                     {children}
                 </div>

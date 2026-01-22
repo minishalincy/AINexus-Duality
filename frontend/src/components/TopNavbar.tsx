@@ -1,17 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { Bell, ChevronDown, User, Upload } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, ChevronDown, User, Menu, LogOut } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-export default function TopNavbar() {
+interface TopNavbarProps {
+    onMenuClick: () => void;
+}
+
+export default function TopNavbar({ onMenuClick }: TopNavbarProps) {
+    const router = useRouter();
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
+    const { t } = useTranslation();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        // Clear any other session data if needed
+        router.push('/teacher/login');
+    };
 
     return (
-        <header className="fixed top-0 left-0 right-0 h-20 bg-primary-dark text-white flex items-center justify-between px-8 z-50 shadow-md">
-            {/* Logo */}
+        <header className="fixed top-0 left-0 right-0 h-20 bg-primary-dark text-white flex items-center justify-between px-4 md:px-8 z-50 shadow-md">
+            {/* Logo & Menu */}
             <div className="flex items-center gap-3">
+                <button 
+                    onClick={onMenuClick}
+                    className="md:hidden p-2 hover:bg-white/10 rounded-lg"
+                >
+                    <Menu size={24} />
+                </button>
+
                 {/* Placeholder Logo Icon */}
                 <div className="w-10 h-10 bg-primary-accent rounded-lg flex items-center justify-center">
                     <svg
@@ -28,7 +49,7 @@ export default function TopNavbar() {
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
                 </div>
-                <h1 className="text-xl font-bold tracking-wide">Assist AI</h1>
+                <h1 className="text-xl font-bold tracking-wide">{t('assist_ai')}</h1>
             </div>
 
             {/* Right Actions */}
@@ -45,14 +66,14 @@ export default function TopNavbar() {
 
                     {notificationsOpen && (
                         <div className="absolute top-full right-0 mt-2 w-80 bg-white text-primary-dark rounded-xl shadow-lg border border-gray-100 overflow-hidden py-2 animate-in fade-in zoom-in-95 duration-200">
-                            <div className="px-4 py-2 border-b border-gray-100 font-semibold text-sm text-secondary-dark">Notifications</div>
+                            <div className="px-4 py-2 border-b border-gray-100 font-semibold text-sm text-secondary-dark">{t('notifications')}</div>
                             <div className="max-h-64 overflow-y-auto">
                                 <div className="px-4 py-3 hover:bg-gray-50 border-b border-gray-50">
                                     <p className="text-sm font-medium">Your class has started</p>
                                     <p className="text-xs text-gray-500 mt-1">10:00 AM - Class 7 Science</p>
                                 </div>
                                 <div className="px-4 py-3 hover:bg-gray-50 border-b border-gray-50">
-                                    <p className="text-sm font-medium">Prepare for today's Science lesson</p>
+                                    <p className="text-sm font-medium">Prepare for today&apos;s Science lesson</p>
                                     <p className="text-xs text-gray-500 mt-1">Upcoming at 11:30 AM</p>
                                 </div>
                                 <div className="px-4 py-3 hover:bg-gray-50">
@@ -82,11 +103,20 @@ export default function TopNavbar() {
 
                     {profileOpen && (
                         <div className="absolute top-full right-0 mt-2 w-56 bg-white text-primary-dark rounded-xl shadow-lg border border-gray-100 overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200">
-                            <button className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-sm font-medium">
-                                <User size={16} /> Edit Profile
+                            <button 
+                                onClick={() => {
+                                    setProfileOpen(false);
+                                    router.push('/profile');
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-2 text-sm font-medium"
+                            >
+                                <User size={16} /> {t('edit_profile') || 'Edit Profile'}
                             </button>
-                            <button className="w-full text-left px-4 py-3 hover:bg-red-50 text-logout-red flex items-center gap-2 text-sm font-medium border-t border-gray-50">
-                                <Upload size={16} className="rotate-90" /> Logout
+                            <button 
+                                onClick={handleLogout}
+                                className="w-full text-left px-4 py-3 hover:bg-red-50 flex items-center gap-2 text-sm font-medium text-red-600 border-t border-gray-100"
+                            >
+                                <LogOut size={16} /> {t('nav.logout') || 'Log Out'}
                             </button>
                         </div>
                     )}

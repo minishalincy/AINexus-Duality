@@ -1,7 +1,7 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Body
 from models import TeacherModel, Token
 from database import teacher_collection
-from auth import get_password_hash, verify_password, create_access_token
+from auth import get_password_hash, verify_password, create_access_token, get_current_user
 from datetime import timedelta
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -19,6 +19,43 @@ class TeacherLoginSchema(BaseModel):
     email: EmailStr
     password: str
     school: Optional[str] = None # Optional for login check, but good if we enforce school match
+
+class TeacherProfileUpdateSchema(BaseModel):
+    name: str
+    profile_picture: Optional[str] = None
+
+@router.get("/profile", response_model=TeacherModel)
+async def get_profile(current_user: dict = Depends(get_current_user)):
+    teacher = await teacher_collection.find_one({"email": current_user["email"]})
+    if not teacher:
+        raise HTTPException(status_code=404, detail="Teacher not found")
+    return teacher
+
+@router.put("/profile", response_model=TeacherModel)
+async def update_profile(
+    update_data: TeacherProfileUpdateSchema,
+    current_user: dict = Depends(get_current_user)
+):
+    teacher = await teacher_collection.find_one({"email": current_user["email"]})
+    if not teacher:
+        raise HTTPException(status_code=404, detail="Teacher not found")
+    
+    update_fields = {
+        "name": update_data.name,
+        "profile_picture": update_data.profile_picture
+    }
+    
+    # Only update fields that are provided (though name is required in schema)
+    # Filter out None values if any optional fields were added later
+    update_fields = {k: v for k, v in update_fields.items() if v is not None}
+
+    await teacher_collection.update_one(
+        {"email": current_user["email"]},
+        {"$set": update_fields}
+    )
+    
+    updated_teacher = await teacher_collection.find_one({"email": current_user["email"]})
+    return updated_teacher
 
 @router.post("/register", response_model=Token)
 async def register_teacher(teacher: TeacherRegisterSchema):

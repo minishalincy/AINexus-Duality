@@ -4,6 +4,7 @@ import { useState } from "react";
 import SubjectCard from "./SubjectCard";
 import { Plus } from "lucide-react";
 import AddClassModal from "./AddClassModal";
+import { useTranslation } from "react-i18next";
 
 // Initial Dummy Data
 const INITIAL_SUBJECTS = [
@@ -14,6 +15,7 @@ const INITIAL_SUBJECTS = [
 ];
 
 export default function SubjectGrid() {
+    const { t } = useTranslation();
     const [subjects, setSubjects] = useState(INITIAL_SUBJECTS);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -43,7 +45,7 @@ export default function SubjectGrid() {
                     onClick={() => setIsModalOpen(true)}
                     className="w-full py-4 rounded-2xl border-2 border-dashed border-primary-dark/30 text-primary-dark font-bold hover:bg-primary-dark/5 hover:border-primary-dark transition-all flex items-center justify-center gap-2"
                 >
-                    ADD CLASS AND SUBJECT <Plus size={24} className="bg-primary-accent text-white rounded-full p-0.5" />
+                    {t('add_class_subject')} <Plus size={24} className="bg-primary-accent text-white rounded-full p-0.5" />
                 </button>
             </div>
 

@@ -1,15 +1,55 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, Send, Image as ImageIcon, StopCircle } from 'lucide-react';
 import TeacherNavbar from '@/components/TeacherNavbar';
-import { useLanguage } from '@/context/LanguageContext';
 
 // TypeScript definitions for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+    results: SpeechRecognitionResultList;
+    resultIndex: number;
+}
+
+interface SpeechRecognitionResultList {
+    [index: number]: SpeechRecognitionResult;
+    length: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+    error: string;
+    message?: string;
+}
+
+interface SpeechRecognitionResult {
+    [index: number]: SpeechRecognitionAlternative;
+    length: number;
+    isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+    transcript: string;
+    confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+    lang: string;
+    interimResults: boolean;
+    maxAlternatives: number;
+    continuous: boolean;
+    start(): void;
+    stop(): void;
+    abort(): void;
+    onstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+    onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void) | null;
+}
+
 interface IWindow extends Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
 }
 
 const LANG_MAP: Record<string, string> = {
@@ -32,7 +72,6 @@ type Message = {
 };
 
 export default function AIWorkspace() {
-    const { t } = useLanguage();
     const [input, setInput] = useState("");
     const [chat, setChat] = useState<Message[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState("English"); // Default for Voice
@@ -91,7 +130,7 @@ export default function AIWorkspace() {
             const langCode = LANG_MAP[selectedLanguage]?.split('-')[0] || 'en';
             form.append("language", langCode);
 
-            const res = await fetch("http://localhost:8000/chat", {
+            const res = await fetch("/chat", {
                 method: "POST",
                 body: form
             });
@@ -108,7 +147,7 @@ export default function AIWorkspace() {
         }
     }
 
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
 
     function toggleListening() {
         if (isListening) {
@@ -132,13 +171,13 @@ export default function AIWorkspace() {
 
         recognition.onstart = () => setIsListening(true);
 
-        recognition.onresult = (e: any) => {
+        recognition.onresult = (e: SpeechRecognitionEvent) => {
             const current = e.resultIndex;
             const transcript = e.results[current][0].transcript;
             setInput((prev) => prev ? `${prev} ${transcript}` : transcript);
         };
 
-        recognition.onerror = (e: any) => {
+        recognition.onerror = (e: SpeechRecognitionErrorEvent) => {
             console.error("Speech recognition error", e.error);
             setIsListening(false);
         };

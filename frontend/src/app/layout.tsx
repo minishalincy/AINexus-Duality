@@ -8,9 +8,17 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+import { OfflineProvider } from "@/context/OfflineContext";
+
 export const metadata: Metadata = {
   title: "Assist AI",
   description: "Teacher's Assistant Platform for Indian Government Schools",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Assist AI",
+  },
 };
 
 export default function RootLayout({
@@ -24,7 +32,9 @@ export default function RootLayout({
         className={`${inter.variable} antialiased selection:bg-primary-500 selection:text-white font-sans`}
       >
         <LanguageProvider>
-          {children}
+          <OfflineProvider>
+            {children}
+          </OfflineProvider>
         </LanguageProvider>
       </body>
     </html>

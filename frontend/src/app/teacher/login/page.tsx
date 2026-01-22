@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { schools } from '@/lib/schools';
+import { useTranslation } from 'react-i18next';
 
 export default function TeacherLogin() {
     const router = useRouter();
-    const { t, setLanguage } = useLanguage();
+    const { setLanguage } = useLanguage();
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -18,12 +20,24 @@ export default function TeacherLogin() {
     const [school, setSchool] = useState('');
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+        if (token && role === 'teacher') {
+            router.push('/dashboard');
+        }
+    }, [router]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8000/api/teacher/login', {
+            if (!navigator.onLine) {
+                throw new Error(t('You are offline. Please connect to internet to login.') || 'You are offline. Please connect to internet to login.');
+            }
+
+            const response = await fetch('/api/teacher/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -33,27 +47,51 @@ export default function TeacherLogin() {
                 }),
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                if (!response.ok) {
+                    if (response.status === 500) {
+                        throw new Error(t('Service unavailable. Please check your internet connection.') || 'Service unavailable. Please check your internet connection.');
+                    }
+                    throw new Error(`Server Error (${response.status}): ${response.statusText}`);
+                }
+            }
 
             if (!response.ok) {
-                throw new Error(data.detail || 'Login failed');
+                throw new Error(data?.detail || 'Login failed');
             }
 
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('role', 'teacher');
 
             // Update language persistence
-            if (data.preferred_language) {
+            // Update language persistence
+            // Only overwrite if we don't have a local preference set in this session
+            // The logic: If user picked a language on Landing Page, stick to it.
+            // If they went straight to login (e.g. by URL) and have no preference, use DB preference.
+
+            const currentSessionLang = localStorage.getItem('preferredLanguage');
+
+            if (!currentSessionLang && data.preferred_language) {
                 localStorage.setItem('preferredLanguage', data.preferred_language);
                 setLanguage(data.preferred_language);
+            } else if (currentSessionLang) {
+                // Ensure we are using the session language (redundant but safe)
+                setLanguage(currentSessionLang);
             }
+
+            // Artificial delay to ensure i18n propagates
+            await new Promise(resolve => setTimeout(resolve, 100));
 
             router.push('/dashboard');
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
             // alert(error.message); // Removed alert
-            setError(error.message || 'An error occurred during login');
+            const err = error as Error;
+            setError(err.message || 'An error occurred during login');
         }
     };
 
@@ -68,10 +106,10 @@ export default function TeacherLogin() {
                 <div className="z-10 text-center text-white">
                     <h1 className="text-6xl font-bold mb-6">{t('welcome')}</h1>
                     <p className="text-2xl text-primary-100 max-w-md mx-auto">
-                        {t('subtitle')}
+                        {t('app_subtitle')}
                     </p>
                 </div>
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,255,255,0.8),_transparent_60%)]"></div>
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_60%)]"></div>
             </motion.div>
 
             {/* Right Column - Login Form */}
@@ -144,14 +182,14 @@ export default function TeacherLogin() {
                     </form>
 
                     <div className="mt-6 text-center text-sm text-gray-600">
-                        {t('dont_have_account')}{' '}
+                        {t('no_account')}{' '}
                         <Link href="/teacher/register" className="text-primary-600 hover:text-primary-800 font-medium">
                             {t('register_here')}
                         </Link>
                     </div>
                     <div className="mt-2 text-center text-sm">
                         <Link href="/role-selection" className="text-gray-400 hover:text-gray-600">
-                            ← {t('back')}
+                            {t('back')}
                         </Link>
                     </div>
                 </motion.div>

@@ -1,0 +1,22 @@
+{
+  "name": "Teacher Dashboard",
+  "short_name": "TeachDash",
+  "description": "Offline-first Teacher Dashboard for Classroom Management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/globe.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "orientation": "portrait-primary"
+}

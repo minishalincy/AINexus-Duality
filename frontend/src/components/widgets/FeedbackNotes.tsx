@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mic, FileText } from "lucide-react";
 import ReflectionModal from "./ReflectionModal";
+import { useTranslation } from "react-i18next";
 
 const STATIC_NOTES = [
     { id: 1, date: "Oct 24", preview: "Science class was chaotic during lab...", type: "Critical" },
@@ -11,6 +12,7 @@ const STATIC_NOTES = [
 ];
 
 export default function FeedbackNotes() {
+    const { t } = useTranslation();
     const [modalOpen, setModalOpen] = useState(false);
     const [notes, setNotes] = useState(STATIC_NOTES);
 
@@ -21,7 +23,7 @@ export default function FeedbackNotes() {
                 id: Date.now(),
                 date: "Today",
                 preview: noteData.text.substring(0, 40) + "...",
-                type: "AI Insight"
+                type: t("ai_insight")
             },
             ...notes
         ]);
@@ -30,8 +32,8 @@ export default function FeedbackNotes() {
     return (
         <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm h-full flex flex-col">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-primary-dark">Classroom Feedback</h3>
-                <span className="text-xs bg-white/60 px-2 py-1 rounded-full text-secondary-dark font-medium border border-white">Recent</span>
+                <h3 className="text-xl font-bold text-primary-dark">{t('classroom_feedback_title')}</h3>
+                <span className="text-xs bg-white/60 px-2 py-1 rounded-full text-secondary-dark font-medium border border-white">{t('recent_badge')}</span>
             </div>
 
             <div className="flex-1 space-y-3 mb-6">
@@ -52,7 +54,7 @@ export default function FeedbackNotes() {
                 onClick={() => setModalOpen(true)}
                 className="w-full py-3 bg-orange-300/20 text-orange-700 font-bold rounded-xl border border-orange-200 hover:bg-orange-300/40 transition-colors flex items-center justify-center gap-2"
             >
-                Add Voice Note <Mic size={18} />
+                {t('add_voice_note')} <Mic size={18} />
             </button>
 
             <ReflectionModal

@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -10,6 +11,7 @@ app = FastAPI(title="Assist AI Backend")
 
 origins = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 app.add_middleware(
@@ -23,19 +25,8 @@ app.add_middleware(
 app.include_router(teacher.router, prefix="/api/teacher", tags=["teacher"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
-app.include_router(ai.router, prefix="/api/ai", tags=["ai"]) # Explicit prefix for clarity, or keep root?
-# Keeping logic: app.include_router(ai.router) EXPOSED /chat at root?
-# Let's check ai.py router.post("/chat"). If included without prefix, it's /chat.
-# The user request might rely on /api/ai/chat if I changed frontend.
-# My frontend code uses: fetch("http://127.0.0.1:8000/api/ai/chat")
-# So I MUST prefix it with /api/ai OR change frontend.
-# Previous main.py had: app.include_router(ai.router) # This will expose /chat at root
-# Wait, if `ai.router` has `@router.post("/chat")`, and included with NO prefix, it is `/chat`.
-# But my frontend code calls `/api/ai/chat`.
-# So I should adding prefix="/api/ai".
-# AND I should remove the old include line.
-
+app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
 
 @app.get("/")
 async def root():
-    return {"message": "Assist AI Backend Running"}
+    return {"message": "Assist AI Backend Running -- RELOAD CONFIRMED"}

@@ -1,15 +1,54 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, StopCircle, Send, CheckCircle, AlertCircle, Lightbulb, ArrowRight, ThumbsUp, ThumbsDown, BookOpen, Volume2 } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Mic, StopCircle, CheckCircle, AlertCircle, Lightbulb, ArrowRight, ThumbsUp, ThumbsDown, BookOpen, Volume2 } from 'lucide-react';
 import TeacherNavbar from '@/components/TeacherNavbar';
-import { useLanguage } from '@/context/LanguageContext';
 
 // Web Speech API Types
+interface SpeechRecognitionEvent extends Event {
+    results: SpeechRecognitionResultList;
+    resultIndex: number;
+}
+
+interface SpeechRecognitionResultList {
+    [index: number]: SpeechRecognitionResult;
+    length: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+    error: string;
+    message?: string;
+}
+
+interface SpeechRecognitionResult {
+    [index: number]: SpeechRecognitionAlternative;
+    length: number;
+    isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+    transcript: string;
+    confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+    lang: string;
+    interimResults: boolean;
+    maxAlternatives: number;
+    continuous: boolean;
+    start(): void;
+    stop(): void;
+    abort(): void;
+    onstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+    onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void) | null;
+}
+
 interface IWindow extends Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
 }
 
 const LANG_MAP: Record<string, string> = {
@@ -31,7 +70,6 @@ interface ReflectionResponse {
 }
 
 export default function DailyFeedback() {
-    const { t } = useLanguage();
     const [state, setState] = useState<FeedbackState>('idle');
     const [input, setInput] = useState("");
     const [response, setResponse] = useState<ReflectionResponse | null>(null);
@@ -50,7 +88,7 @@ export default function DailyFeedback() {
             const langCode = LANG_MAP[selectedLanguage]?.split('-')[0] || 'en';
             form.append("language", langCode);
 
-            const res = await fetch("http://localhost:8000/chat", {
+            const res = await fetch("/chat", {
                 method: "POST",
                 body: form
             });
@@ -85,7 +123,7 @@ export default function DailyFeedback() {
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
         recognition.onstart = () => setState('recording');
-        recognition.onresult = (e: any) => {
+        recognition.onresult = (e: SpeechRecognitionEvent) => {
             const text = e.results[0][0].transcript;
             setInput(prev => prev ? `${prev} ${text}` : text);
         };
@@ -183,7 +221,7 @@ export default function DailyFeedback() {
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl shadow-lg border border-indigo-100 p-8 max-w-md mx-auto"
+                        className="bg-linear-to-br from-indigo-50 to-white rounded-2xl shadow-lg border border-indigo-100 p-8 max-w-md mx-auto"
                     >
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <CheckCircle className="w-8 h-8 text-green-600" />
@@ -280,10 +318,10 @@ export default function DailyFeedback() {
 
                         {/* Pro Tip */}
                         <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 flex items-center gap-4">
-                            <Lightbulb className="w-6 h-6 text-indigo-600 flex-shrink-0" />
+                            <Lightbulb className="w-6 h-6 text-indigo-600 shrink-0" />
                             <div>
                                 <span className="font-bold text-indigo-900 text-sm uppercase tracking-wide">Pro Tip</span>
-                                <p className="text-indigo-800 font-medium italic">"{response.pro_tip}"</p>
+                                <p className="text-indigo-800 font-medium italic">&quot;{response.pro_tip}&quot;</p>
                             </div>
                         </div>
 

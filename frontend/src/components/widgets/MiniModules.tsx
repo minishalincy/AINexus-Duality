@@ -1,11 +1,14 @@
 "use client";
 
 import { PlayCircle } from "lucide-react";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function MiniModules() {
+    const { t } = useTranslation();
     return (
         <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm">
-            <h3 className="text-xl font-bold text-primary-dark mb-4">Recently Watched</h3>
+            <h3 className="text-xl font-bold text-primary-dark mb-4">{t('recently_watched')}</h3>
 
             <div className="flex items-center gap-4 overflow-x-auto pb-4">
                 {[1, 2, 3].map((i) => (
@@ -17,9 +20,11 @@ export default function MiniModules() {
                 ))}
             </div>
 
-            <button className="w-full py-3 bg-white border border-gray-200 rounded-xl text-primary-dark font-bold hover:bg-gray-50 transition-colors shadow-sm">
-                Watch Mini Modules
-            </button>
+            <Link href="/mini-modules" className="block w-full">
+                <button className="w-full py-3 bg-white border border-gray-200 rounded-xl text-primary-dark font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                    {t('watch_mini_modules')}
+                </button>
+            </Link>
         </div>
     );
 }

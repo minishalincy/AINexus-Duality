@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion';
 import { User, ShieldCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 export default function RoleSelection() {
     const router = useRouter();
-    const { t } = useLanguage();
+    const { t } = useTranslation();
 
     return (
         <div className="min-h-screen flex bg-gray-50">
@@ -20,7 +20,7 @@ export default function RoleSelection() {
                 <div className="z-10 text-center text-white">
                     <h1 className="text-6xl font-bold mb-6">{t('welcome')}</h1>
                     <p className="text-2xl text-primary-100 max-w-md mx-auto">
-                        {t('subtitle')}
+                        {t('role_selection_subtitle')}
                     </p>
                 </div>
                 {/* Abstract shapes for visual interest */}
@@ -36,7 +36,7 @@ export default function RoleSelection() {
                         className="text-center mb-10"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('get_started')}</h2>
-                        <p className="text-gray-600">{t('role_selection')}</p>
+                        <p className="text-gray-600">{t('select_role')}</p>
                     </motion.div>
 
                     <div className="space-y-6">
@@ -73,7 +73,7 @@ export default function RoleSelection() {
 
                     <div className="mt-12 text-center">
                         <button onClick={() => router.replace('/')} className="text-gray-400 hover:text-gray-600 text-sm">
-                            ← {t('back')}
+                            {t('back')}
                         </button>
                     </div>
                 </div>

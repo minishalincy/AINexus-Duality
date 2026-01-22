@@ -13,6 +13,7 @@ class TeacherModel(BaseModel):
     password_hash: str
     school: str
     preferred_language: str = "en"
+    profile_picture: Optional[str] = None
 
 class AdminSessionModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)

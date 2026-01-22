@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { schools } from '@/lib/schools';
 import { useLanguage } from '@/context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminLogin() {
     const router = useRouter();
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
+    const { t } = useTranslation();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -23,7 +25,7 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8000/api/admin/login', {
+            const response = await fetch('/api/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -44,9 +46,10 @@ export default function AdminLogin() {
             localStorage.setItem('role', 'admin');
             router.push('/admin/dashboard');
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            setError(error.message || 'Login failed');
+            const err = error as Error;
+            setError(err.message || 'Login failed');
         }
     };
 
@@ -61,10 +64,10 @@ export default function AdminLogin() {
                 <div className="z-10 text-center text-white">
                     <h1 className="text-6xl font-bold mb-6">{t('welcome')}</h1>
                     <p className="text-2xl text-secondary-100 max-w-md mx-auto">
-                        {t('subtitle')}
+                        {t('app_subtitle')}
                     </p>
                 </div>
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,255,255,0.8),_transparent_60%)]"></div>
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_60%)]"></div>
             </motion.div>
 
             {/* Right Column - Login Form */}
@@ -76,7 +79,7 @@ export default function AdminLogin() {
                 >
                     <div className="text-center mb-8">
                         <h2 className="text-2xl font-bold text-gray-900">{t('admin_login')}</h2>
-                        <p className="text-sm text-gray-500">{t('admin_desc')}</p>
+                        <p className="text-sm text-gray-500">{t('admin_login_subtitle')}</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,7 +107,7 @@ export default function AdminLogin() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('admin_scope')}</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('school')}</label>
                             <select
                                 required
                                 value={formData.school}
@@ -130,7 +133,7 @@ export default function AdminLogin() {
 
                     <div className="mt-4 text-center text-sm">
                         <Link href="/role-selection" className="text-gray-400 hover:text-gray-600">
-                            ← {t('back')}
+                            {t('back')}
                         </Link>
                     </div>
                 </motion.div>

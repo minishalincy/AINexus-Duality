@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Plus, CheckCircle2, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
+interface Task {
+    id: number;
+    title: string;
+    type: string;
+}
+
 // Mock Data
-const INITIAL_TASKS = {
+const INITIAL_TASKS: Record<string, Task[]> = {
     "2026-01-24": [
         { id: 1, title: "Vasant Panchami", type: "holiday" },
         { id: 2, title: "Submit Grades", type: "work" }
@@ -17,10 +24,10 @@ const INITIAL_TASKS = {
 };
 
 export default function CalendarWidget() {
+    const { t } = useTranslation();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [tasks, setTasks] = useState<any>(INITIAL_TASKS);
+    const [tasks] = useState<Record<string, Task[]>>(INITIAL_TASKS);
 
     // Calendar Logic
     const year = currentDate.getFullYear();
@@ -44,7 +51,7 @@ export default function CalendarWidget() {
     const selectedTasks = tasks[formattedSelectedDate] || [];
 
     return (
-        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm h-full flex flex-col md:flex-row gap-6">
+        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm h-full flex flex-col md:flex-row lg:flex-col xl:flex-row gap-6">
             {/* Left: Calendar Grid */}
             <div className="flex-1">
                 <div className="flex items-center justify-between mb-4 bg-white/50 p-2 rounded-xl">
@@ -67,15 +74,11 @@ export default function CalendarWidget() {
                     ))}
                     {Array.from({ length: daysInMonth }).map((_, i) => {
                         const day = i + 1;
-                        const dateStr = new Date(year, month, day).toISOString().split('T')[0]; // Simple format
-                        // Fix timezone issue in production by using local date construction properly, 
-                        // but for this UI demo string manip is fine if consistent.
-                        // Better:
+                        // const dateStr = new Date(year, month, day).toISOString().split('T')[0]; // Simple format
                         const dObj = new Date(year, month, day);
                         const isToday = new Date().toDateString() === dObj.toDateString();
                         const isSelected = selectedDate.toDateString() === dObj.toDateString();
 
-                        // reconstruct key for task lookup to match state
                         const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                         const hasTask = tasks[key];
 
@@ -99,7 +102,7 @@ export default function CalendarWidget() {
             </div>
 
             {/* Right: Task List */}
-            <div className="w-full md:w-48 bg-primary-dark text-white rounded-2xl p-4 flex flex-col">
+            <div className="w-full md:w-48 lg:w-full xl:w-48 bg-primary-dark text-white rounded-2xl p-4 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <span className="text-2xl font-bold block">{selectedDate.getDate()}</span>
@@ -112,19 +115,19 @@ export default function CalendarWidget() {
 
                 <div className="mb-4">
                     <div className="flex items-center gap-2 text-xs opacity-70 mb-2">
-                        <Clock size={12} /> <span>{selectedTasks.length} pending tasks</span>
+                        <Clock size={12} /> <span>{selectedTasks.length} {t('pending_tasks')}</span>
                     </div>
                 </div>
 
                 <div className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
                     {selectedTasks.length > 0 ? (
-                        selectedTasks.map((t: any) => (
+                        selectedTasks.map((t: Task) => (
                             <div key={t.id} className={`p-2 rounded-lg text-xs font-medium ${t.type === 'holiday' ? 'bg-green-500/20 text-green-100 border border-green-500/30' : 'bg-blue-500/20 text-blue-100 border border-blue-500/30'}`}>
                                 {t.title}
                             </div>
                         ))
                     ) : (
-                        <div className="text-xs opacity-50 text-center py-4">No tasks</div>
+                        <div className="text-xs opacity-50 text-center py-4">{t('no_tasks')}</div>
                     )}
                 </div>
             </div>

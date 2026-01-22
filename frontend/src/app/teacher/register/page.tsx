@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { schools } from '@/lib/schools';
 import { useLanguage } from '@/context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 export default function TeacherRegister() {
     const router = useRouter();
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
+    const { t } = useTranslation();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -20,17 +22,29 @@ export default function TeacherRegister() {
     });
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+        if (token && role === 'teacher') {
+            router.push('/dashboard');
+        }
+    }, [router]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
         if (formData.password !== formData.confirmPassword) {
-            setError(t('passwords_do_not_match') || "Passwords do not match");
+            setError(t("passwords_do_not_match"));
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/teacher/register', {
+            if (!navigator.onLine) {
+                throw new Error(t('You are offline. Please connect to internet to register.') || 'You are offline. Please connect to internet to register.');
+            }
+
+            const response = await fetch('/api/teacher/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -42,10 +56,20 @@ export default function TeacherRegister() {
                 }),
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                if (!response.ok) {
+                    if (response.status === 500) {
+                        throw new Error(t('Service unavailable. Please check your internet connection.') || 'Service unavailable. Please check your internet connection.');
+                    }
+                    throw new Error(`Server Error (${response.status}): ${response.statusText}`);
+                }
+            }
 
             if (!response.ok) {
-                throw new Error(data.detail || 'Registration failed');
+                throw new Error(data?.detail || 'Registration failed');
             }
 
             // Store token and redirect
@@ -53,9 +77,10 @@ export default function TeacherRegister() {
             localStorage.setItem('role', 'teacher');
             router.push('/dashboard');
 
-        } catch (error: any) {
-            console.error(error);
-            setError(error.message || 'Registration failed');
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error(err);
+            setError(err.message || 'Registration failed');
         }
     };
 
@@ -70,10 +95,10 @@ export default function TeacherRegister() {
                 <div className="z-10 text-center text-white">
                     <h1 className="text-6xl font-bold mb-6">{t('welcome')}</h1>
                     <p className="text-2xl text-primary-100 max-w-md mx-auto">
-                        {t('subtitle')}
+                        {t('app_subtitle')}
                     </p>
                 </div>
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,255,255,0.8),_transparent_60%)]"></div>
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_60%)]"></div>
             </motion.div>
 
             {/* Right Column - Registration Form */}

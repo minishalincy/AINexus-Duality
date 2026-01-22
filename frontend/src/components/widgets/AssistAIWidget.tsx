@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
 import { useState, useRef, useEffect } from "react";
 import { Mic, Image as ImageIcon, Send, X, Loader2, ChevronDown, StopCircle } from "lucide-react";
 import { languages } from "@/lib/languages";
+import { useTranslation } from "react-i18next";
 
 // Web Speech API Types
 interface IWindow extends Window {
@@ -11,6 +12,7 @@ interface IWindow extends Window {
 }
 
 export default function AssistAIWidget() {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<{ role: 'user' | 'ai', text: string }[]>([]);
@@ -90,7 +92,7 @@ export default function AssistAIWidget() {
         if (!isOpen) setIsOpen(true);
 
         // Add user message
-        setMessages(prev => [...prev, { role: 'user', text: text || (image ? "Sent an image" : "") }]);
+        setMessages(prev => [...prev, { role: 'user', text: text || (image ? t('sent_image') : "") }]);
         setInput("");
         setLoading(true);
 
@@ -100,7 +102,7 @@ export default function AssistAIWidget() {
             if (image) formData.append("image", image);
             formData.append("language", selectedLang); // Send selected language
 
-            const res = await fetch("http://127.0.0.1:8000/api/ai/chat", {
+            const res = await fetch("/api/ai/chat", {
                 method: "POST",
                 body: formData,
             });
@@ -117,7 +119,7 @@ export default function AssistAIWidget() {
             setMessages(prev => [...prev, { role: 'ai', text: reply }]);
         } catch (error) {
             console.error(error);
-            setMessages(prev => [...prev, { role: 'ai', text: "Sorry, I couldn't connect to the server." }]);
+            setMessages(prev => [...prev, { role: 'ai', text: t('connection_error') }]);
         } finally {
             setLoading(false);
         }
@@ -141,7 +143,7 @@ export default function AssistAIWidget() {
                     <div className="w-6 h-6 rounded-full border border-gray-500 flex items-center justify-center">
                         <span className="text-xs">AI</span>
                     </div>
-                    <span className="text-lg">Message Assist AI...</span>
+                    <span className="text-lg">{t('message_placeholder')}</span>
                 </div>
 
                 {/* Buttons */}
@@ -154,7 +156,7 @@ export default function AssistAIWidget() {
                             {isRecording ? <StopCircle size={32} className="text-red-500" /> : <Mic size={32} className="text-primary-dark" />}
                         </div>
                         <span className={`text-sm font-medium ${isRecording ? 'text-red-500' : 'text-gray-500'}`}>
-                            {isRecording ? "Stop Recording" : "Tap to Speak"}
+                            {isRecording ? t('stop_recording') : t('tap_to_speak')}
                         </span>
                     </button>
                     <button
@@ -174,7 +176,7 @@ export default function AssistAIWidget() {
                             accept="image/*"
                             onChange={handleImageUpload}
                         />
-                        <span className="text-sm font-medium text-gray-500">Upload Photo</span>
+                        <span className="text-sm font-medium text-gray-500">{t('upload_photo')}</span>
                     </button>
                 </div>
             </div>
@@ -188,7 +190,7 @@ export default function AssistAIWidget() {
                         <div className="bg-primary-dark text-white p-4 flex items-center justify-between z-10">
                             <h3 className="text-lg font-bold flex items-center gap-2">
                                 <span className="w-8 h-8 bg-primary-accent rounded-lg flex items-center justify-center">AI</span>
-                                Assist AI Chat
+                                {t('ai_assist_title')}
                             </h3>
                             <button onClick={() => { setIsOpen(false); setIsRecording(false); recognitionRef.current?.stop(); }} className="hover:bg-white/10 p-2 rounded-full">
                                 <X size={20} />
@@ -203,7 +205,7 @@ export default function AssistAIWidget() {
                                         <div key={i} className="w-1 bg-primary-500 rounded-full animate-[wave_1s_ease-in-out_infinite]" style={{ animationDelay: `${i * 0.1}s`, height: '100%' }}></div>
                                     ))}
                                 </div>
-                                <span className="text-primary-700 font-medium animate-pulse">Listening ({languages.find(l => l.code === selectedLang)?.name})...</span>
+                                <span className="text-primary-700 font-medium animate-pulse">{t('listening_status')} ({languages.find(l => l.code === selectedLang)?.name})...</span>
                                 <button onClick={toggleRecording} className="ml-4 p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
                                     <StopCircle size={20} />
                                 </button>
@@ -214,7 +216,7 @@ export default function AssistAIWidget() {
                         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-soft-bg/30 pb-24"> {/* Added padding bottom for input area */}
                             {messages.length === 0 && (
                                 <div className="text-center text-gray-500 mt-10">
-                                    <p>Ask me anything about your class, or upload a photo!</p>
+                                    <p>{t('ai_welcome_msg')}</p>
                                 </div>
                             )}
                             {messages.map((msg, idx) => (
@@ -230,7 +232,7 @@ export default function AssistAIWidget() {
                             {loading && (
                                 <div className="flex justify-start">
                                     <div className="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
-                                        <Loader2 size={16} className="animate-spin text-primary-accent" /> Thinking...
+                                        <Loader2 size={16} className="animate-spin text-primary-accent" /> {t('thinking_status')}
                                     </div>
                                 </div>
                             )}
@@ -269,7 +271,7 @@ export default function AssistAIWidget() {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                    placeholder={isRecording ? "Listening..." : "Type a message..."}
+                                    placeholder={isRecording ? t('listening_status') : t('message_placeholder')}
                                     disabled={isRecording}
                                     className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-accent outline-none disabled:opacity-70 disabled:cursor-not-allowed"
                                 />
