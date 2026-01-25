@@ -45,8 +45,7 @@ async def update_profile(
         "profile_picture": update_data.profile_picture
     }
     
-    # Only update fields that are provided (though name is required in schema)
-    # Filter out None values if any optional fields were added later
+    # Only update fields that are provided
     update_fields = {k: v for k, v in update_fields.items() if v is not None}
 
     await teacher_collection.update_one(

@@ -21,7 +21,7 @@ export default function MiniModules() {
             </div>
 
             <Link href="/mini-modules" className="block w-full">
-                <button className="w-full py-3 bg-white border border-gray-200 rounded-xl text-primary-dark font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                <button className="w-full py-3 bg-white border border-gray-200 rounded-xl text-primary-dark font-bold hover:bg-gray-50 transition-colors shadow-sm cursor-pointer">
                     {t('watch_mini_modules')}
                 </button>
             </Link>

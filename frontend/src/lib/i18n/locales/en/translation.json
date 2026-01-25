@@ -8,7 +8,7 @@
   "teacher_desc": "Access your classroom tools",
   "admin": "Admin",
   "admin_desc": "Manage school settings",
-  "back": "← Back",
+  "back": "Back",
   "teacher_login": "Teacher Login",
   "admin_login": "Admin Login",
   "admin_login_subtitle": "Log in to manage school settings and teachers",
@@ -119,5 +119,8 @@
   "save_changes": "Save Changes",
   "nav.logout": "Log Out",
   "nav.editProfile": "Edit Profile",
-  "profile_picture_hint": "Click to upload a new photo"
+  "profile_picture_hint": "Click to upload a new photo",
+  "add_reminder": "Add reminder...",
+  "reminder_due": "Reminder Due",
+  "reminders": "Reminders"
 }

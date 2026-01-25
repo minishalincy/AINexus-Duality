@@ -1,12 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-    /* Strict Palette Variables - Sky Blue Theme */
-    --color-primary-dark: #0284c7;  /* Sky 600 */
-    --color-secondary-dark: #0369a1; /* Sky 700 */
-    --color-primary-accent: #38bdf8; /* Sky 400 */
-    --color-light-accent: #bae6fd;   /* Sky 200 */
-    --color-soft-bg: #f0f9ff;        /* Sky 50 */
+    /* Strict Palette Variables - Deep Blue Theme */
+    --color-primary-dark: #0e2e72;
+    /* Deep Blue */
+    --color-secondary-dark: #3498db;
+    /* Light Blue */
+    --color-primary-accent: #38bdf8;
+    /* Sky 400 */
+    --color-light-accent: #bae6fd;
+    /* Sky 200 */
+    --color-soft-bg: #ffffff;
+    /* Pure White */
     --color-logout-red: #dc2626;
 
     /* Mapping to 'primary' scale for existing UI compatibility */

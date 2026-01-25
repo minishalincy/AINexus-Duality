@@ -71,9 +71,12 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
             setMessage({ type: "success", text: t('profile_updated') || "Profile updated successfully" });
             setTimeout(() => {
                 onClose();
+                window.dispatchEvent(new Event('profile-updated'));
             }, 1000);
-        } catch {
-            setMessage({ type: "error", text: t('profile_update_failed') || "Failed to update profile" });
+        } catch (error: any) {
+            console.error("Profile update error:", error);
+            const errorMsg = error.message || (t('profile_update_failed') || "Failed to update profile");
+            setMessage({ type: "error", text: errorMsg });
         } finally {
             setSaving(false);
         }
@@ -156,7 +159,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                                         type="email"
                                         value={profile?.email || ""}
                                         disabled
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 cursor-not-allowed"
                                     />
                                 </div>
 
@@ -169,7 +172,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                                         type="text"
                                         value={profile?.school || ""}
                                         disabled
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 cursor-not-allowed"
                                     />
                                 </div>
                             </div>

@@ -175,7 +175,7 @@ export default function TeacherLogin() {
 
                         <button
                             type="submit"
-                            className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg shadow-md transition-all transform active:scale-95"
+                            className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg shadow-md transition-all transform active:scale-95 cursor-pointer"
                         >
                             {t('login')}
                         </button>
@@ -188,7 +188,7 @@ export default function TeacherLogin() {
                         </Link>
                     </div>
                     <div className="mt-2 text-center text-sm">
-                        <Link href="/role-selection" className="text-gray-400 hover:text-gray-600">
+                        <Link href="/" className="text-gray-400 hover:text-gray-600">
                             {t('back')}
                         </Link>
                     </div>

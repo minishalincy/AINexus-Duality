@@ -1,10 +1,8 @@
 
 export interface FeedbackAnalysis {
-    acknowledgement: string;
-    deep_dive: string;
-    quick_fix: string;
-    tomorrow_prep: string;
-    pro_tip: string;
+    good_things: string;
+    bad_things: string;
+    improvement: string;
 }
 
 export interface FeedbackItem {
@@ -36,10 +34,13 @@ export const FeedbackService = {
         return res.json();
     },
 
-    async analyze(text: string, language: string): Promise<FeedbackItem> {
+    async analyze(text: string, language: string, feedbackId?: string): Promise<FeedbackItem> {
         const formData = new FormData();
         formData.append("message", text);
         formData.append("language", language);
+        if (feedbackId) {
+            formData.append("feedback_id", feedbackId);
+        }
 
         const res = await fetch(`${API_BASE}/analyze`, {
             method: "POST",

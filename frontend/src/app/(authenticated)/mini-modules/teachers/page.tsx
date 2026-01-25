@@ -48,7 +48,7 @@ export default function TeacherSupportPage() {
                                         }`} />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-lg font-semibold text-gray-900">{category.label}</h3>
+                                    <h3 className="text-lg font-semibold text-gray-900">{t(category.key, category.label)}</h3>
                                     {hasVideos && (
                                         <span className="text-xs text-green-600 font-medium">{t('available', 'Available')}</span>
                                     )}

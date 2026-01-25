@@ -15,6 +15,7 @@ export default function CalendarWidget() {
     const [loading, setLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
     const [newReminderText, setNewReminderText] = useState("");
+    const [newReminderTime, setNewReminderTime] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
     // Initial Fetch
@@ -63,10 +64,12 @@ export default function CalendarWidget() {
         try {
             const newReminder = await CalendarService.addReminder({
                 date: formattedSelectedDate,
-                text: newReminderText
+                text: newReminderText,
+                time: newReminderTime || undefined
             });
             setReminders([...reminders, newReminder]);
             setNewReminderText("");
+            setNewReminderTime("");
             setIsAdding(false);
         } catch (error) {
             console.error("Failed to add", error);
@@ -88,15 +91,15 @@ export default function CalendarWidget() {
     };
 
     return (
-        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm h-full flex flex-col md:flex-row lg:flex-col xl:flex-row gap-6">
+        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-md h-full flex flex-col md:flex-row lg:flex-col xl:flex-row gap-6">
             {/* Left: Calendar Grid */}
             <div className="flex-1">
                 <div className="flex items-center justify-between mb-4 bg-white/50 p-2 rounded-xl">
-                    <button onClick={handlePrevMonth} className="p-1 hover:bg-white rounded-lg"><ChevronLeft size={20} /></button>
+                    <button onClick={handlePrevMonth} className="p-1 hover:bg-white rounded-lg cursor-pointer"><ChevronLeft size={20} /></button>
                     <span className="font-bold text-primary-dark">
                         {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
                     </span>
-                    <button onClick={handleNextMonth} className="p-1 hover:bg-white rounded-lg"><ChevronRight size={20} /></button>
+                    <button onClick={handleNextMonth} className="p-1 hover:bg-white rounded-lg cursor-pointer"><ChevronRight size={20} /></button>
                 </div>
 
                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
@@ -125,9 +128,9 @@ export default function CalendarWidget() {
                             <button
                                 key={day}
                                 onClick={() => setSelectedDate(dObj)}
-                                className={`aspect-square rounded-lg flex items-center justify-center text-sm relative transition-all
-                            ${isSelected ? "bg-primary-accent text-white shadow-md scale-105" : "hover:bg-white/50 text-gray-700"}
-                            ${isToday && !isSelected ? "border border-primary-accent text-primary-accent font-bold" : ""}
+                                className={`aspect-square rounded-lg flex items-center justify-center text-sm relative transition-all cursor-pointer
+                            ${isSelected ? "bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white shadow-md scale-105" : "hover:bg-gray-50 text-gray-700"}
+                            ${isToday && !isSelected ? "border border-primary-500 text-primary-600 font-bold" : ""}
                         `}
                             >
                                 {day}
@@ -141,9 +144,8 @@ export default function CalendarWidget() {
             </div>
 
             {/* Right: Task List */}
-            <div className="w-full md:w-48 lg:w-full xl:w-56 bg-primary-dark text-white rounded-2xl p-4 flex flex-col relative overflow-hidden">
-                {/* Blue Gradient Overlay */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-accent/20 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+            <div className="w-full md:w-48 lg:w-full xl:w-56 bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white border border-gray-100 rounded-2xl p-4 flex flex-col relative overflow-hidden shadow-sm">
+                {/* Gradient Overlay removed for white theme */}
 
                 <div className="flex items-center justify-between mb-4 z-10">
                     <div>
@@ -152,7 +154,7 @@ export default function CalendarWidget() {
                     </div>
                     <button
                         onClick={() => setIsAdding(!isAdding)}
-                        className="bg-white/20 p-2 rounded-lg hover:bg-white/30 transition-colors"
+                        className="bg-white/20 text-white hover:bg-white/30 p-2 rounded-lg transition-colors cursor-pointer backdrop-blur-sm"
                     >
                         {isAdding ? <X size={18} /> : <Plus size={18} />}
                     </button>
@@ -160,7 +162,7 @@ export default function CalendarWidget() {
 
                 {/* Add Input Area */}
                 {isAdding && (
-                    <div className="mb-4 animate-in slide-in-from-top-2 z-10">
+                    <div className="mb-4 animate-in slide-in-from-top-2 z-10 space-y-2">
                         <input
                             autoFocus
                             value={newReminderText}
@@ -169,13 +171,21 @@ export default function CalendarWidget() {
                             placeholder={t('add_reminder') || "Add reminder..."}
                             className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20"
                         />
-                        <button
-                            onClick={handleAddReminder}
-                            disabled={isSaving}
-                            className="w-full mt-2 bg-white text-primary-dark text-xs font-bold py-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
-                        >
-                            {isSaving ? "Saving..." : "Save"}
-                        </button>
+                        <div className="flex gap-2">
+                            <input
+                                type="time"
+                                value={newReminderTime}
+                                onChange={(e) => setNewReminderTime(e.target.value)}
+                                className="bg-white/10 border border-white/20 rounded-lg px-2 py-2 text-sm text-white focus:outline-none focus:bg-white/20"
+                            />
+                            <button
+                                onClick={handleAddReminder}
+                                disabled={isSaving}
+                                className="flex-1 bg-white text-[#0e2e72] text-xs font-bold py-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 cursor-pointer"
+                            >
+                                {isSaving ? "Saving..." : "Save"}
+                            </button>
+                        </div>
                     </div>
                 )}
 
@@ -190,11 +200,15 @@ export default function CalendarWidget() {
                         <div className="flex justify-center py-4"><Loader2 className="animate-spin opacity-50" /></div>
                     ) : selectedReminders.length > 0 ? (
                         selectedReminders.map((r) => (
-                            <div key={r.id} className="group p-3 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 transition-colors text-sm flex justify-between items-start gap-2">
-                                <span className="text-white/90 break-words">{r.text}</span>
+                            <div key={r.id} className="group p-3 rounded-xl bg-white/10 border border-white/5 hover:bg-white/20 transition-colors text-sm flex justify-between items-start gap-2">
+                                <div className="flex flex-col">
+                                    <span className="text-white break-words">{r.text}</span>
+                                    {r.time && <span className="text-xs text-white/70">{r.time}</span>}
+                                </div>
                                 <button
                                     onClick={() => handleDelete(r.id)}
-                                    className="opacity-0 group-hover:opacity-100 text-red-300 hover:text-red-100 transition-opacity"
+                                    className="opacity-0 group-hover:opacity-100 text-white/70 hover:text-white transition-opacity cursor-pointer"
+                                    title="Delete"
                                 >
                                     <Trash2 size={14} />
                                 </button>

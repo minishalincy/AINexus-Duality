@@ -10,11 +10,13 @@ router = APIRouter()
 class Reminder(BaseModel):
     id: str
     date: str # YYYY-MM-DD
+    time: Optional[str] = None # HH:MM
     text: str
     teacher_email: Optional[str] = None
 
 class CreateReminder(BaseModel):
     date: str
+    time: Optional[str] = None
     text: str
 
 @router.get("/reminders", response_model=List[Reminder])
@@ -34,6 +36,7 @@ async def add_reminder(data: CreateReminder):
         new_item = {
             "id": uuid.uuid4().hex,
             "date": data.date,
+            "time": data.time,
             "text": data.text,
             "teacher_email": "demo_teacher@school.com"
         }

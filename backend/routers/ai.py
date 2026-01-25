@@ -33,6 +33,10 @@ AI Teaching Assistant (Instant Classroom Help)
 
 Your Goal: Give teachers a 5-second answer they can use IMMEDIATELY in class.
 Constraint: MAX 5 LINES. No long paragraphs.
+IMPORTANT: You must respond in the SAME LANGUAGE as the user's message. 
+- If the user writes in Kannada, respond in Kannada.
+- If the user writes in Hindi, respond in Hindi.
+- If the language is explicitly specified, use that language.
 
 Mandatory Structure:
 1. 💡 Simple Concept: One sentence, no jargon.
@@ -58,6 +62,7 @@ Analyze the teacher's reflection and output a JSON response with these exact key
   "pro_tip": "A short, clever teaching hack."
 }
 Tone: Encouraging, practical, and concise.
+IMPORTANT: The values in the JSON must be in the SAME LANGUAGE as the user's input.
 """
 
 # Translation Config
@@ -67,6 +72,12 @@ LANG_MAP = {
     "kn": "kan_Knda", "hi": "hin_Deva", "ta": "tam_Taml", "te": "tel_Telu",
     "ml": "mal_Mlym", "mr": "mar_Deva", "bn": "ben_Beng", "gu": "guj_Gujr",
     "pa": "pan_Guru", "or": "ory_Orya", "ur": "urd_Arab", "en": "eng_Latn"
+}
+
+LANG_NAMES = {
+    "kn": "Kannada", "hi": "Hindi", "ta": "Tamil", "te": "Telugu",
+    "ml": "Malayalam", "mr": "Marathi", "bn": "Bengali", "gu": "Gujarati",
+    "pa": "Punjabi", "or": "Odia", "ur": "Urdu", "en": "English"
 }
 
 def translate(text, model, src_lang, tgt_lang):
@@ -92,6 +103,7 @@ def translate(text, model, src_lang, tgt_lang):
         print(f"Translation Exception: {e}")
         return text
 
+# Legacy functions preserved if needed, but not used in main flow anymore
 def to_english(text, lang):
     if lang == "en":
         return text
@@ -129,24 +141,23 @@ async def chat(
         if not message and not image:
             return {"reply": "Please provide a message or an image."}
 
-        # 1. Determine Language
-        lang = language if language in LANG_MAP else "en"
-        english_message = ""
+        # 1. Determine Language Name for Prompting
+        lang_code = language if language in LANG_NAMES else "en"
+        lang_name = LANG_NAMES.get(lang_code, "English")
         
-        if message:
-            english_message = to_english(message, lang)
-
         # 2. Prepare Content
         chat_content = []
         
         if mode == "reflection":
             chat_content.append(REFLECTION_SYSTEM_PROMPT)
-            chat_content.append(f"Teacher Reflection:\n{english_message}")
+            chat_content.append(f"User Language Preference: {lang_name}")
+            chat_content.append(f"Teacher Reflection:\n{message}")
             if image:
                  chat_content.append("(Context image provided)")
         else:
             chat_content.append(SYSTEM_PROMPT)
-            chat_content.append(f"Teacher question:\n{english_message}")
+            chat_content.append(f"User Language Preference: {lang_name}")
+            chat_content.append(f"Teacher question:\n{message}")
 
         if image:
             try:
@@ -174,14 +185,14 @@ async def chat(
 
         if mode == "reflection":
             try:
+                # Gemini usually respects the JSON instruction, but in the requested language
                 json_response = json.loads(generated_text)
-                final_reply = translate_json(json_response, lang)
-                return {"reply": final_reply, "type": "json"}
+                return {"reply": json_response, "type": "json"}
             except json.JSONDecodeError:
                 return {"reply": {"acknowledgement": generated_text}, "type": "json"}
         else:
-            final_reply = from_english(generated_text, lang)
-            return {"reply": final_reply, "type": "text"}
+            # Direct response (multilingual by default now)
+            return {"reply": generated_text, "type": "text"}
 
     except Exception as e:
         print(f"Chat Error: {e}")

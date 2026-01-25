@@ -25,7 +25,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             )}
 
             <aside className={`
-                w-64 bg-primary-dark text-white flex flex-col h-screen fixed left-0 top-0 pt-24 z-40
+                w-64 bg-white text-gray-900 border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0 pt-24 z-40 shadow-md
                 transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
             `}>
@@ -41,11 +41,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             prefetch={false}
                             onClick={onClose}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/dashboard"
-                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                                : "hover:bg-secondary-dark/50"
+                                ? "bg-primary-50 text-primary-700 font-medium border-r-4 border-primary-600"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-primary-600"
                                 }`}
                         >
-                            <LayoutDashboard size={20} className="text-light-accent" />
+                            <LayoutDashboard size={20} />
                             <span>{t('dashboard')}</span>
                         </Link>
                         <Link
@@ -53,11 +53,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             prefetch={false}
                             onClick={onClose}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/my-classroom"
-                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                                : "hover:bg-secondary-dark/50"
+                                ? "bg-primary-50 text-primary-700 font-medium border-r-4 border-primary-600"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-primary-600"
                                 }`}
                         >
-                            <School size={20} className="text-light-accent" />
+                            <School size={20} />
                             <span>{t('my_classroom')}</span>
                         </Link>
                         <Link
@@ -65,11 +65,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             prefetch={false}
                             onClick={onClose}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === "/mini-modules"
-                                ? "bg-secondary-dark font-medium border-l-4 border-light-accent"
-                                : "hover:bg-secondary-dark/50"
+                                ? "bg-primary-50 text-primary-700 font-medium border-r-4 border-primary-600"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-primary-600"
                                 }`}
                         >
-                            <PlayCircle size={20} className="text-light-accent" />
+                            <PlayCircle size={20} />
                             <span>{t('watch_mini_modules')}</span>
                         </Link>
 
@@ -77,8 +77,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
 
                 <div className="p-4 mb-4">
-                    <button className="flex items-center gap-3 px-4 py-3 w-full text-left bg-logout-red text-white rounded-lg hover:opacity-90 transition-opacity font-medium shadow-md">
-                        <LogOut size={20} />
+                    <button className="flex items-center gap-3 px-4 py-3 w-full text-left bg-red-50 text-red-600 rounded-lg  font-medium group cursor-pointer">
+                        <LogOut size={20} className="group-hover:text-red-600" />
                         <span>{t('logout')}</span>
                     </button>
                 </div>

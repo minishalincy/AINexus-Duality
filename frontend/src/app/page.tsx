@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { languages } from '@/lib/languages';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function LanguageSelection() {
   const { setLanguage } = useLanguage();
@@ -11,7 +12,7 @@ export default function LanguageSelection() {
 
   const handleLanguageSelect = (langCode: string) => {
     setLanguage(langCode);
-    router.push('/role-selection');
+    router.push('/teacher/login');
   };
 
   return (
@@ -21,7 +22,15 @@ export default function LanguageSelection() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl font-bold text-primary-700 mb-2">Assist AI</h1>
+        <div className="relative h-24 w-80 mx-auto mb-4">
+          <Image
+            src="/images/logo.png"
+            alt="Assist AI"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
         <p className="text-gray-600 text-lg">Teacher's Assistant Platform for Government Schools</p>
       </motion.div>
 
@@ -45,7 +54,7 @@ export default function LanguageSelection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => handleLanguageSelect(lang.code)}
-              className="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-transparent hover:border-primary-500 bg-gray-50 hover:bg-primary-50 transition-all duration-300 group"
+              className="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-transparent hover:border-primary-500 bg-gray-50 hover:bg-primary-50 transition-all duration-300 group cursor-pointer"
             >
               <span className="text-xl font-bold text-gray-800 group-hover:text-primary-700 mb-1">
                 {lang.nativeName}

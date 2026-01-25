@@ -138,9 +138,9 @@ export default function AssistAIWidget() {
                 {/* Input Bar */}
                 <div
                     onClick={() => setIsOpen(true)}
-                    className="bg-gray-900 text-gray-400 p-4 rounded-2xl flex items-center gap-3 cursor-pointer hover:bg-gray-800 transition-colors mb-4"
+                    className="bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white p-4 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-all mb-4"
                 >
-                    <div className="w-6 h-6 rounded-full border border-gray-500 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full border border-white/30 flex items-center justify-center">
                         <span className="text-xs">AI</span>
                     </div>
                     <span className="text-lg">{t('message_placeholder')}</span>
@@ -150,7 +150,7 @@ export default function AssistAIWidget() {
                 <div className="grid grid-cols-2 gap-4">
                     <button
                         onClick={toggleRecording}
-                        className={`bg-white border-2 hover:border-primary-accent rounded-xl p-6 flex flex-col items-center justify-center gap-2 group transition-all ${isRecording ? 'border-red-500 animate-pulse' : 'border-gray-100'}`}
+                        className={`bg-white border-2 hover:border-primary-accent rounded-xl p-6 flex flex-col items-center justify-center gap-2 group transition-all cursor-pointer ${isRecording ? 'border-red-500 animate-pulse' : 'border-gray-100'}`}
                     >
                         <div className={`p-3 rounded-full border transition-transform group-hover:scale-110 ${isRecording ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'}`}>
                             {isRecording ? <StopCircle size={32} className="text-red-500" /> : <Mic size={32} className="text-primary-dark" />}
@@ -161,7 +161,7 @@ export default function AssistAIWidget() {
                     </button>
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="bg-white border-2 border-gray-100 hover:border-primary-accent rounded-xl p-6 flex flex-col items-center justify-center gap-2 group transition-all"
+                        className="bg-white border-2 border-gray-100 hover:border-primary-accent rounded-xl p-6 flex flex-col items-center justify-center gap-2 group transition-all cursor-pointer"
                     >
                         <div className="bg-white p-3 rounded-full border border-gray-200 group-hover:scale-110 transition-transform">
                             {/* Colorful Icon */}
@@ -192,7 +192,7 @@ export default function AssistAIWidget() {
                                 <span className="w-8 h-8 bg-primary-accent rounded-lg flex items-center justify-center">AI</span>
                                 {t('ai_assist_title')}
                             </h3>
-                            <button onClick={() => { setIsOpen(false); setIsRecording(false); recognitionRef.current?.stop(); }} className="hover:bg-white/10 p-2 rounded-full">
+                            <button onClick={() => { setIsOpen(false); setIsRecording(false); recognitionRef.current?.stop(); }} className="hover:bg-white/10 p-2 rounded-full cursor-pointer">
                                 <X size={20} />
                             </button>
                         </div>
@@ -206,7 +206,7 @@ export default function AssistAIWidget() {
                                     ))}
                                 </div>
                                 <span className="text-primary-700 font-medium animate-pulse">{t('listening_status')} ({languages.find(l => l.code === selectedLang)?.name})...</span>
-                                <button onClick={toggleRecording} className="ml-4 p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200">
+                                <button onClick={toggleRecording} className="ml-4 p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 cursor-pointer">
                                     <StopCircle size={20} />
                                 </button>
                             </div>
@@ -259,7 +259,7 @@ export default function AssistAIWidget() {
 
                                 <button
                                     onClick={toggleRecording}
-                                    className={`p-2 rounded-full transition-colors ${isRecording ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                    className={`p-2 rounded-full transition-colors cursor-pointer ${isRecording ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                                     title="Voice Input"
                                 >
                                     {isRecording ? <div className="animate-pulse"><StopCircle size={20} /></div> : <Mic size={20} />}
@@ -278,7 +278,7 @@ export default function AssistAIWidget() {
                                 <button
                                     onClick={() => handleSendMessage()}
                                     disabled={loading || (!input.trim() && !isRecording)}
-                                    className="p-3 bg-primary-dark text-white rounded-xl hover:bg-secondary-dark disabled:opacity-50 transition-colors"
+                                    className="p-3 bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white rounded-xl hover:opacity-90 disabled:opacity-50 transition-all shadow-md cursor-pointer"
                                 >
                                     <Send size={20} />
                                 </button>

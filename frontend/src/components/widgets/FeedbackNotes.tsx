@@ -46,7 +46,7 @@ export default function FeedbackNotes() {
     };
 
     return (
-        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-sm h-full flex flex-col">
+        <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-md h-full flex flex-col">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-primary-dark">{t('classroom_feedback_title')}</h3>
                 <span className="text-xs bg-white/60 px-2 py-1 rounded-full text-secondary-dark font-medium border border-white">{t('recent_badge')}</span>
@@ -77,7 +77,7 @@ export default function FeedbackNotes() {
 
             <button
                 onClick={() => { setResultData(null); setModalOpen(true); }}
-                className="w-full py-3 bg-orange-300/20 text-orange-700 font-bold rounded-xl border border-orange-200 hover:bg-orange-300/40 transition-colors flex items-center justify-center gap-2 shrink-0"
+                className="w-full py-3 bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white font-bold rounded-xl shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer"
             >
                 {t('add_voice_note')} <Mic size={18} />
             </button>
