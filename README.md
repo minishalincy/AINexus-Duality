@@ -38,7 +38,7 @@ Assist AI is a comprehensive digital platform designed to support teachers in go
 
 -   **Frontend**: [Next.js 16](https://nextjs.org/) (React, TypeScript), Tailwind CSS.
 -   **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python), Uvicorn.
--   **Database**: [MongoDB](https://www.mongodb.com/) (Atlas or Local).
+-   **Database**: [MongoDB](https://www.mongodb.com/) (Atlas).
 -   **AI Engine**: Google Gemini API (2.0 Flash).
 -   **Speech Services**: Web Speech API for Speech-to-Text.
 
@@ -51,7 +51,7 @@ Follow these steps to set up the project locally.
 ### Prerequisites
 -   [Node.js](https://nodejs.org/) (v18+)
 -   [Python](https://www.python.org/) (v3.9+)
--   [MongoDB](https://www.mongodb.com/) (Running locally or Atlas URI)
+-   [MongoDB](https://www.mongodb.com/) (Atlas URI)
 
 ### 1. Clone the Repository
 ```bash
@@ -79,7 +79,7 @@ pip install -r requirements.txt
 **Configuration**:
 Create a `.env` file in `backend/` with your credentials:
 ```env
-MONGODB_URI=mongodb://localhost:27017/school_db
+MONGODB_URI=your_mongodb_atlas_uri
 GEMINI_API_KEY=your_google_gemini_api_key
 SECRET_KEY=your_jwt_secret_key
 ```
