@@ -193,15 +193,13 @@ export default function TopNavbar({ onMenuClick }: TopNavbarProps) {
             let updated = false;
 
             todayReminders.forEach(r => {
-                if (r.time) {
-                    const [h, m] = r.time.split(':').map(Number);
-                    if ((h * 60 + m) <= currentTimeValue) {
+                const isDue = r.time ? ((parseInt(r.time.split(':')[0]) * 60 + parseInt(r.time.split(':')[1])) <= currentTimeValue) : true;
+
+                if (isDue) {
+                    if (!newRead.has(r.id)) {
                         newRead.add(r.id);
                         updated = true;
                     }
-                } else {
-                    newRead.add(r.id); // All day / feedback
-                    updated = true;
                 }
             });
 
