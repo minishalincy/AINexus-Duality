@@ -117,3 +117,18 @@ npm run dev
 ---
 
 
+---
+
+## 📸 Application Screenshots
+
+<div align="center">
+  <img src="frontend/public/images/firstpagePic.png" alt="First Page" width="800"/>
+  <br/>
+  <img src="frontend/public/images/webpagepic.png" alt="Web Page" width="800"/>
+  <br/>
+  <img src="frontend/public/images/webpagepic1.png" alt="Web Page 1" width="800"/>
+  <br/>
+  <img src="frontend/public/images/webpagepic2.png" alt="Web Page 2" width="800"/>
+</div>
+
+Made with ❤️ for Education.
