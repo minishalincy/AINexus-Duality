@@ -3,7 +3,7 @@ from typing import Optional, List
 from typing_extensions import Annotated
 from pydantic import BaseModel, EmailStr, Field, BeforeValidator
 
-# MongoDB ObjectId helper
+
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class TeacherModel(BaseModel):

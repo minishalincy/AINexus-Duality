@@ -19,7 +19,7 @@ export default function MyClassroomPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // Load Classrooms on Mount
+    
     useEffect(() => {
         let mounted = true;
         const loadClassrooms = async () => {
@@ -28,7 +28,7 @@ export default function MyClassroomPage() {
                 if (mounted) {
                     setClassrooms(data);
                     if (data.length > 0) {
-                        // Select the first one by default as requested
+                        
                         setSelectedClassroom(data[0]);
                     }
                 }
@@ -38,7 +38,7 @@ export default function MyClassroomPage() {
                     console.error("Failed to load classrooms", err);
                     if (err.message?.includes("Unauthorized") || err.message?.includes("401")) {
                         console.log("Redirecting to login due to unauthorized error");
-                        // Clear invalid token to prevent redirect loop in login page
+                        
                         localStorage.removeItem('token');
                         localStorage.removeItem('role');
                         router.push('/teacher/login');
@@ -72,7 +72,7 @@ export default function MyClassroomPage() {
 
             setClassrooms(prev => [...prev, ...newClasses]);
 
-            // "When the teacher adds subjects, the first added subject card must be automatically selected by default"
+            
             if (newClasses.length > 0 && (!selectedClassroom || classrooms.length === 0)) {
                 setSelectedClassroom(newClasses[0]);
             }
@@ -98,7 +98,7 @@ export default function MyClassroomPage() {
 
             setClassrooms(prev => {
                 const updated = prev.filter(c => c.id !== id);
-                // If we deleted the selected classroom, select another one if available
+                
                 if (selectedClassroom?.id === id) {
                     setSelectedClassroom(updated.length > 0 ? updated[0] : null);
                 }
@@ -117,9 +117,9 @@ export default function MyClassroomPage() {
         }
     };
 
-    // Helper to get syllabus for current classroom
+    
     const getSyllabus = (cls: Classroom) => {
-        // Ensure grade is treated as a string key
+        
         const gradeKey = String(cls.grade);
         const gradeData = SYLLABUS_DATA[gradeKey];
 
@@ -127,14 +127,14 @@ export default function MyClassroomPage() {
             return gradeData[cls.subject];
         }
 
-        // Debug fallback
+        
         console.warn(`Syllabus not found for Grade: ${cls.grade} (${typeof cls.grade}), Subject: ${cls.subject}`);
         return DEFAULT_SYLLABUS;
     };
 
     return (
         <div className="space-y-8 min-h-screen">
-            {/* Header */}
+            { }
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">{t('my_classroom')}</h1>
@@ -142,11 +142,11 @@ export default function MyClassroomPage() {
                 </div>
             </div>
 
-            {/* Content Area */}
+            { }
             {loading ? (
                 <div className="h-32 bg-gray-100 animate-pulse rounded-2xl"></div>
             ) : classrooms.length === 0 ? (
-                // Empty State - Centered and Clear
+                
                 <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-300">
                     <div className="w-24 h-24 bg-primary-50 text-primary-accent rounded-full flex items-center justify-center mb-6">
                         <Plus size={48} />
@@ -165,7 +165,7 @@ export default function MyClassroomPage() {
                 </div>
             ) : (
                 <>
-                    {/* Classroom Horizontal List */}
+                    { }
                     <div className="overflow-x-auto pb-4 -mx-4 px-4 sticky top-0 z-20 bg-[#F3F4F6]/95 backdrop-blur-sm pt-2">
                         <div className="flex items-center gap-4 w-max">
                             {classrooms.map(cls => (
@@ -180,7 +180,7 @@ export default function MyClassroomPage() {
                                 />
                             ))}
 
-                            {/* Add Button in the list flow */}
+                            { }
                             <button
                                 onClick={() => setIsModalOpen(true)}
                                 className="min-w-24 h-36 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-300 text-gray-400 hover:border-primary-accent hover:text-primary-accent hover:bg-primary-50 transition-all"
@@ -191,10 +191,10 @@ export default function MyClassroomPage() {
                         </div>
                     </div>
 
-                    {/* Selected Classroom Content */}
+                    { }
                     {selectedClassroom && (
                         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            {/* Syllabus Tracker */}
+                            { }
                             <div className="space-y-6">
                                 <SyllabusTracker
                                     key={selectedClassroom.id}
@@ -202,7 +202,7 @@ export default function MyClassroomPage() {
                                     syllabus={getSyllabus(selectedClassroom)}
                                     initialCompletedChapters={selectedClassroom.completed_chapters || []}
                                     onUpdateProgress={(chapters) => {
-                                        // Optimistic update
+                                        
                                         setClassrooms(prev => prev.map(c =>
                                             c.id === selectedClassroom.id
                                                 ? { ...c, completed_chapters: chapters }

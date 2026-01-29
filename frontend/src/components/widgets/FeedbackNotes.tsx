@@ -14,11 +14,11 @@ export default function FeedbackNotes() {
 
     const [resultData, setResultData] = useState<FeedbackItem | null>(null);
 
-    // Fetch Notes
+    
     useEffect(() => {
         loadNotes();
 
-        // Listener to open modal with result
+        
         const handleOpenResult = (e: CustomEvent<FeedbackItem>) => {
             console.log("Opening result modal for:", e.detail.id);
             setResultData(e.detail);
@@ -41,7 +41,7 @@ export default function FeedbackNotes() {
     };
 
     const handleSaveNote = (newItem: FeedbackItem) => {
-        // Prepend new item
+        
         setNotes([newItem, ...notes]);
     };
 
@@ -58,7 +58,7 @@ export default function FeedbackNotes() {
                 ) : notes.length === 0 ? (
                     <div className="text-center text-gray-400 text-sm py-4">No feedback yet. Record your first note!</div>
                 ) : (
-                    notes.slice(0, 5).map(note => ( // Show top 5
+                    notes.slice(0, 5).map(note => ( 
                         <div key={note.id} onClick={() => { setResultData(note); setModalOpen(true); }} className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 cursor-pointer hover:border-primary-accent transition-colors">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 
                                 ${note.type === 'Critical' ? 'bg-red-50 text-red-600' :

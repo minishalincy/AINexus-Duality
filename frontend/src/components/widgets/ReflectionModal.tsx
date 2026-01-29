@@ -30,13 +30,13 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
     const [resultItem, setResultItem] = useState<FeedbackItem | null>(null);
     const [selectedLang, setSelectedLang] = useState("en");
 
-    // Handle initialData or opening logic
+    
     useEffect(() => {
         if (isOpen && initialData) {
             setResultItem(initialData);
             setStep("result");
         } else if (isOpen) {
-            // New entry
+            
             setStep("input");
             setInputText("");
             setResultItem(null);
@@ -46,7 +46,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
 
     const recognitionRef = useRef<any>(null);
 
-    // Initialize Speech Recognition
+    
     useEffect(() => {
         const { webkitSpeechRecognition, SpeechRecognition } = window as any;
         if (webkitSpeechRecognition || SpeechRecognition) {
@@ -94,17 +94,17 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
         }
     }, [isOpen]);
 
-    // Audio Refs
-    // const mediaRecorderRef = useRef<MediaRecorder | null>(null); // Removed in favor of Speech API
-    // const chunksRef = useRef<Blob[]>([]);
+    
+    
+    
 
-    // Listen for "Show Result" event
+    
     useEffect(() => {
         const handleShowResult = (e: CustomEvent<FeedbackItem>) => {
             setResultItem(e.detail);
             setStep("result");
-            // If not open, the parent needs to open it. 
-            // We assume parent handles isOpen based on this event too or separate logic.
+            
+            
         };
 
         window.addEventListener('open-feedback-result', handleShowResult as EventListener);
@@ -136,7 +136,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
         try {
             const newItem = await FeedbackService.analyze(inputText, selectedLang);
 
-            // Instant result
+            
             setResultItem(newItem);
             onSave(newItem);
             setStep("result");
@@ -149,7 +149,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
         }
     };
 
-    // removed downloadPDF
+    
 
     if (!isOpen) return null;
 
@@ -158,7 +158,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
             <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden relative z-10 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-                {/* Header */}
+                { }
                 <div className="bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white p-4 flex justify-between items-center shrink-0">
                     <h3 className="text-lg font-bold">Daily Reflection AI</h3>
                     <button onClick={onClose} className="hover:bg-white/20 p-1 rounded-full"><X size={20} /></button>
@@ -166,10 +166,10 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
 
                 <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
                     {step === "processing" ? (
-                        // Processing state is now instantaneous (or just generic loading), 
-                        // but we keep this simple block just in case we need a transitional state, 
-                        // though we plan to skip it. 
-                        // Actually, let's just show the input or result. loading is handled by button state.
+                        
+                        
+                        
+                        
                         <div className="flex justify-center py-20"><Loader2 className="animate-spin text-primary-500" size={48} /></div>
                     ) : step === "input" ? (
                         <div className="space-y-6">
@@ -177,7 +177,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
                                 Speak naturally or type about your class. Select your preferred language for better context.
                             </p>
 
-                            {/* Language Selector */}
+                            { }
                             <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-200 w-max">
                                 <Globe size={18} className="text-gray-500" />
                                 <select
@@ -223,7 +223,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
                         resultItem && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
                                 <div className="space-y-4">
-                                    {/* Good Things */}
+                                    { }
                                     <div className="p-4 bg-green-50 rounded-2xl border border-green-100">
                                         <div className="flex items-center gap-2 mb-2">
                                             <ThumbsUp size={18} className="text-green-600" />
@@ -232,7 +232,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
                                         <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{resultItem.analysis.good_things}</p>
                                     </div>
 
-                                    {/* Bad Things */}
+                                    { }
                                     <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
                                         <div className="flex items-center gap-2 mb-2">
                                             <ThumbsDown size={18} className="text-red-600" />
@@ -241,7 +241,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
                                         <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{resultItem.analysis.bad_things}</p>
                                     </div>
 
-                                    {/* Improvement */}
+                                    { }
                                     <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
                                         <div className="flex items-center gap-2 mb-2">
                                             <CheckCircle size={18} className="text-blue-600" />
@@ -251,7 +251,7 @@ export default function ReflectionModal({ isOpen, onClose, onSave, initialData }
                                     </div>
                                 </div>
 
-                                {/* Actions */}
+                                { }
                                 <div className="pt-4 border-t border-gray-100 space-y-4">
                                     <button
                                         onClick={onClose}

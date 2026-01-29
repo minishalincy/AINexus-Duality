@@ -43,7 +43,7 @@ export default function ProfilePage() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            if (file.size > 5 * 1024 * 1024) { 
                 setMessage({ type: 'error', text: 'Image size should be less than 5MB' });
                 return;
             }
@@ -69,8 +69,8 @@ export default function ProfilePage() {
             setProfile(updated);
             setMessage({ type: 'success', text: 'Profile updated successfully' });
             
-            // Update local storage name for immediate UI feedback if stored there
-            // localStorage.setItem('userName', updated.name); 
+            
+            
         } catch {
             setMessage({ type: 'error', text: 'Failed to update profile' });
         } finally {
@@ -90,7 +90,7 @@ export default function ProfilePage() {
             
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
                 <form onSubmit={handleSave} className="space-y-8">
-                    {/* Profile Picture Section */}
+                    { }
                     <div className="flex flex-col items-center space-y-4 pb-4 border-b border-gray-100">
                         <input 
                             type="file" 
@@ -120,7 +120,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Name */}
+                        { }
                         <div className="space-y-2 md:col-span-2">
                             <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                 <User size={18} className="text-primary-accent" />
@@ -136,7 +136,7 @@ export default function ProfilePage() {
                             />
                         </div>
 
-                        {/* Email (Read-only) */}
+                        { }
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                 <Mail size={18} className="text-gray-400" />
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                             <p className="text-xs text-gray-400">Email address cannot be changed</p>
                         </div>
 
-                        {/* School (Read-only) */}
+                        { }
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                 <School size={18} className="text-gray-400" />
@@ -167,7 +167,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    { }
                     <div className="pt-6 flex items-center justify-end gap-4 border-t border-gray-100">
                         <button
                             type="button"

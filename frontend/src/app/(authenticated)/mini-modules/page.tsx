@@ -16,7 +16,7 @@ export default function MiniModulesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-                {/* For Classroom Card */}
+                { }
                 <Link href="/mini-modules/grades">
                     <motion.div
                         whileHover={{ scale: 1.02 }}
@@ -42,7 +42,7 @@ export default function MiniModulesPage() {
                     </motion.div>
                 </Link>
 
-                {/* For Me Card */}
+                { }
                 <Link href="/mini-modules/teachers">
                     <motion.div
                         whileHover={{ scale: 1.02 }}

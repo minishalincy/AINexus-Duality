@@ -22,21 +22,21 @@ export default function TeacherNavbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
                 <div className="flex justify-between items-center h-full">
 
-                    {/* Left: Logo */}
+                    { }
                     <Link href="/teacher/dashboard" className="flex items-center gap-2">
                         <span className="text-2xl font-bold text-gray-900 tracking-tight">Assist AI</span>
                     </Link>
 
-                    {/* Right: Icons */}
+                    { }
                     <div className="flex items-center gap-4">
 
-                        {/* Notification Icon */}
+                        { }
                         <button className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-full transition-colors relative">
                             <Bell className="w-6 h-6" />
-                            {/* <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span> */}
+                            { }
                         </button>
 
-                        {/* Profile Dropdown */}
+                        { }
                         <div className="relative">
                             <button
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}

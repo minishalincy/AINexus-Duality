@@ -21,9 +21,9 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-    // Initial Load
+    
     useEffect(() => {
-        if (!isOpen) return; // Only load when open
+        if (!isOpen) return; 
 
         const loadProfile = async () => {
             setLoading(true);
@@ -67,7 +67,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                 name,
                 profile_picture: avatarUrl || undefined,
             });
-            // Success! Close after a brief moment or show success
+            
             setMessage({ type: "success", text: t('profile_updated') || "Profile updated successfully" });
             setTimeout(() => {
                 onClose();
@@ -86,15 +86,15 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            {/* Blurry Backdrop */}
+            { }
             <div
                 className="absolute inset-0 bg-black/30 backdrop-blur-md transition-opacity duration-300"
                 onClick={onClose}
             />
 
-            {/* Modal Card */}
+            { }
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-300 border border-white/20">
-                {/* Header */}
+                { }
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
                     <h2 className="text-xl font-bold text-gray-800">{t('nav.editProfile')}</h2>
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
@@ -107,7 +107,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                         <div className="flex justify-center py-12"><Loader2 className="animate-spin text-primary-dark" size={32} /></div>
                     ) : (
                         <form onSubmit={handleSave} className="space-y-6">
-                            {/* Avatar */}
+                            { }
                             <div className="flex flex-col items-center gap-3">
                                 <input
                                     type="file"
@@ -134,7 +134,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                                 <p className="text-xs text-gray-500">{t('profile_picture_hint')}</p>
                             </div>
 
-                            {/* Inputs */}
+                            { }
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -177,7 +177,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
                                 </div>
                             </div>
 
-                            {/* Buttons */}
+                            { }
                             <div className="flex items-center gap-3 pt-4">
                                 <button
                                     type="button"

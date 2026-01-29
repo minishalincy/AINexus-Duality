@@ -22,11 +22,11 @@ class FeedbackItem(BaseModel):
     id: str
     date: str
     preview: str
-    type: str # Critical, Observation, Success
+    type: str 
     full_text: str
     language: str
     analysis: FeedbackResponse
-    effectiveness: Optional[str] = None # "yes", "no"
+    effectiveness: Optional[str] = None 
     teacher_email: str
 
 class RateFeedbackRequest(BaseModel):
@@ -34,7 +34,7 @@ class RateFeedbackRequest(BaseModel):
 
 @router.get("/list", response_model=List[FeedbackItem])
 async def get_feedback():
-    # user: dict = Depends(get_current_user) # Removed for demo consistency
+    
     cursor = feedback_collection.find({"teacher_email": "demo_teacher@school.com"}).sort("date", -1)
     items = await cursor.to_list(length=50)
     return items
@@ -56,9 +56,9 @@ async def analyze_feedback(
     else:
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY missing")
 
-    # Prompt Engineering
+    
     if feedback_id:
-        # RETRY MODE: Concise Bullet Points
+        
         PROMPT = f"""
         You are an expert teacher mentor. This is a RE-ANALYSIS for a teacher who needed more clarity.
         
@@ -85,7 +85,7 @@ async def analyze_feedback(
         IMPORTANT: The content of the values MUST be in the requested language ({language}).
         """
     else:
-        # INITIAL MODE: Standard Analysis (Short Paragraphs)
+        
         PROMPT = f"""
         You are an expert teacher mentor. Analyze the following teacher's reflection/input properly.
         
@@ -106,7 +106,7 @@ async def analyze_feedback(
         
         IMPORTANT: The content of the values MUST be in the requested language ({language}).
         """
-    
+
     try:
         response = client.models.generate_content(
             model='gemini-2.5-flash',
@@ -116,31 +116,31 @@ async def analyze_feedback(
             )
         )
         generated_text = response.text.strip()
-        # Clean markdown code blocks if present
+        
         if generated_text.startswith("```"):
             generated_text = generated_text.replace("```json", "").replace("```", "").strip()
-        
+
         analysis_data = json.loads(generated_text)
-        
+
     except Exception as e:
         print(f"AI Generation Error: {e}")
-        # Fallback for error handling
+        
         analysis_data = {
             "good_things": "Unable to analyze at this moment.",
             "bad_things": "Please try again.",
             "improvement": "Server error."
         }
 
-    # Determine type based on simple heuristic or could ask AI
-    feedback_type = "Observation" 
     
+    feedback_type = "Observation" 
+
     if feedback_id:
-        # UPDATE existing record
+        
         await feedback_collection.update_one(
             {"id": feedback_id, "teacher_email": "demo_teacher@school.com"},
             {"$set": {"analysis": analysis_data, "date": datetime.now().strftime("%Y-%m-%d")}}
         )
-        # Fetch updated item to return
+        
         updated_item = await feedback_collection.find_one({"id": feedback_id})
         if updated_item:
             if "_id" in updated_item: del updated_item["_id"]
@@ -148,7 +148,7 @@ async def analyze_feedback(
         else:
              raise HTTPException(status_code=404, detail="Feedback ID not found for update")
 
-    # Create and Save Record
+    
     new_id = uuid.uuid4().hex
     new_item = {
         "id": new_id,
@@ -159,12 +159,12 @@ async def analyze_feedback(
         "language": language,
         "analysis": analysis_data,
         "effectiveness": None,
-        "teacher_email": "demo_teacher@school.com" 
+        "teacher_email": "demo_teacher@school.com"
     }
-    
+
     await feedback_collection.insert_one(new_item)
     if "_id" in new_item: del new_item["_id"]
-    
+
     return new_item
 
 @router.patch("/{id}/rate")

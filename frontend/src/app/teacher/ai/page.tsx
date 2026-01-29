@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Mic, Send, Image as ImageIcon, StopCircle } from 'lucide-react';
 import TeacherNavbar from '@/components/TeacherNavbar';
 
-// TypeScript definitions for Web Speech API
+
 interface SpeechRecognitionEvent extends Event {
     results: SpeechRecognitionResultList;
     resultIndex: number;
@@ -74,7 +74,7 @@ type Message = {
 export default function AIWorkspace() {
     const [input, setInput] = useState("");
     const [chat, setChat] = useState<Message[]>([]);
-    const [selectedLanguage, setSelectedLanguage] = useState("English"); // Default for Voice
+    const [selectedLanguage, setSelectedLanguage] = useState("English"); 
     const [isListening, setIsListening] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -106,13 +106,13 @@ export default function AIWorkspace() {
         const currentImage = selectedImage;
         const currentPreview = imagePreview;
 
-        // Reset inputs immediately for better UX
+        
         setInput("");
         setSelectedImage(null);
         setImagePreview(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
 
-        // Add user message to chat
+        
         const newChat: Message[] = [...chat, {
             role: "teacher",
             text: currentInput,
@@ -126,7 +126,7 @@ export default function AIWorkspace() {
             if (currentInput) form.append("message", currentInput);
             if (currentImage) form.append("image", currentImage);
 
-            // Extract language code (e.g., 'kn' from 'kn-IN')
+            
             const langCode = LANG_MAP[selectedLanguage]?.split('-')[0] || 'en';
             form.append("language", langCode);
 
@@ -152,7 +152,7 @@ export default function AIWorkspace() {
     function toggleListening() {
         if (isListening) {
             recognitionRef.current?.stop();
-            return; // onend will handle state update
+            return; 
         }
 
         const windowWithSpeech = window as unknown as IWindow;
@@ -193,7 +193,7 @@ export default function AIWorkspace() {
             <TeacherNavbar />
 
             <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 pt-24 flex flex-col h-[calc(100vh-64px)]">
-                {/* Header Section */}
+                { }
                 <div className="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function AIWorkspace() {
                         <p className="text-sm text-gray-500">Your AI Teaching Assistant</p>
                     </div>
 
-                    {/* Voice Language Selector */}
+                    { }
                     <select
                         value={selectedLanguage}
                         onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -214,7 +214,7 @@ export default function AIWorkspace() {
                     </select>
                 </div>
 
-                {/* Chat Area */}
+                { }
                 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50">
                         {chat.length === 0 && (
@@ -262,7 +262,7 @@ export default function AIWorkspace() {
                         <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input Area */}
+                    { }
                     <div className="p-4 bg-white border-t border-gray-100">
                         {imagePreview && (
                             <div className="mb-2 flex items-center gap-2">
@@ -280,7 +280,7 @@ export default function AIWorkspace() {
                         )}
 
                         <div className="flex items-center gap-2">
-                            {/* File Upload Button */}
+                            { }
                             <button
                                 onClick={() => fileInputRef.current?.click()}
                                 className="p-3 text-gray-500 hover:text-primary-600 hover:bg-gray-50 rounded-full transition-colors"
@@ -296,7 +296,7 @@ export default function AIWorkspace() {
                                 />
                             </button>
 
-                            {/* Text Input */}
+                            { }
                             <input
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
@@ -305,7 +305,7 @@ export default function AIWorkspace() {
                                 className="flex-1 bg-gray-50 text-gray-900 rounded-full px-5 py-3 border-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all outline-none"
                             />
 
-                            {/* Voice Button */}
+                            { }
                             <button
                                 onClick={toggleListening}
                                 className={`p-3 rounded-full transition-all duration-300 ${isListening
@@ -317,7 +317,7 @@ export default function AIWorkspace() {
                                 {isListening ? <StopCircle className="w-6 h-6" /> : <Mic className="w-5 h-5" />}
                             </button>
 
-                            {/* Send Button */}
+                            { }
                             <button
                                 onClick={send}
                                 disabled={!input && !selectedImage}

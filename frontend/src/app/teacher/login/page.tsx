@@ -66,11 +66,11 @@ export default function TeacherLogin() {
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('role', 'teacher');
 
-            // Update language persistence
-            // Update language persistence
-            // Only overwrite if we don't have a local preference set in this session
-            // The logic: If user picked a language on Landing Page, stick to it.
-            // If they went straight to login (e.g. by URL) and have no preference, use DB preference.
+            
+            
+            
+            
+            
 
             const currentSessionLang = localStorage.getItem('preferredLanguage');
 
@@ -78,18 +78,18 @@ export default function TeacherLogin() {
                 localStorage.setItem('preferredLanguage', data.preferred_language);
                 setLanguage(data.preferred_language);
             } else if (currentSessionLang) {
-                // Ensure we are using the session language (redundant but safe)
+                
                 setLanguage(currentSessionLang);
             }
 
-            // Artificial delay to ensure i18n propagates
+            
             await new Promise(resolve => setTimeout(resolve, 100));
 
             router.push('/dashboard');
 
         } catch (error: unknown) {
             console.error(error);
-            // alert(error.message); // Removed alert
+            
             const err = error as Error;
             setError(err.message || 'An error occurred during login');
         }
@@ -97,7 +97,7 @@ export default function TeacherLogin() {
 
     return (
         <div className="min-h-screen flex bg-gray-50">
-            {/* Left Column - Branding */}
+            { }
             <motion.div
                 initial={{ x: -50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -112,7 +112,7 @@ export default function TeacherLogin() {
                 <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_60%)]"></div>
             </motion.div>
 
-            {/* Right Column - Login Form */}
+            { }
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 overflow-y-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

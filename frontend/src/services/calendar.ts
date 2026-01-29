@@ -1,7 +1,8 @@
 
 export interface Reminder {
     id: string;
-    date: string; // YYYY-MM-DD
+    date: string;
+    time?: string;
     text: string;
     teacher_email?: string;
 }
@@ -9,6 +10,7 @@ export interface Reminder {
 export interface CreateReminderDTO {
     date: string;
     text: string;
+    time?: string;
 }
 
 const API_Base = "/api/calendar";

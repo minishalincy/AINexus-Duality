@@ -33,7 +33,7 @@ export const OfflineProvider = ({ children }: { children: React.ReactNode }) => 
                 return;
             }
 
-            // Sort by timestamp to preserve order
+            
             queue.sort((a, b) => a.timestamp - b.timestamp);
 
             for (const req of queue) {
@@ -48,7 +48,7 @@ export const OfflineProvider = ({ children }: { children: React.ReactNode }) => 
                     });
 
                     if (response.ok) {
-                        // Smart Sync: Update subsequent requests if this was a temp creation
+                        
                         if (req.tempId) {
                             try {
                                 const data = await response.clone().json();
@@ -75,7 +75,7 @@ export const OfflineProvider = ({ children }: { children: React.ReactNode }) => 
                         console.log('Request synced successfully.');
                     } else {
                         console.error('Failed to sync request:', response.statusText);
-                        // If it's a 4xx error, maybe we should discard it? 
+                        
                     }
                 } catch (err) {
                     console.error('Network error during sync:', err);
@@ -89,7 +89,7 @@ export const OfflineProvider = ({ children }: { children: React.ReactNode }) => 
     }, [isSyncing]);
 
     useEffect(() => {
-        // Initial check
+        
         setIsOnline(navigator.onLine);
 
         const handleOnline = () => {

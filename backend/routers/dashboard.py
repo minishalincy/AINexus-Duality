@@ -9,19 +9,19 @@ import uuid
 
 router = APIRouter()
 
-# Models
+
 class Note(BaseModel):
     id: str
     text: str
     date: str
-    type: str # Critical, Observation, Success, AI Insight
-    data: Optional[dict] = None # For AI reflection data
+    type: str 
+    data: Optional[dict] = None 
 
 class Task(BaseModel):
     id: str
     title: str
     date: str
-    type: str # holiday, work
+    type: str 
 
 class CreateSubject(BaseModel):
     grade: str
@@ -33,7 +33,7 @@ class Subject(CreateSubject):
     completed_chapters: List[int] = []
     teacher_email: Optional[str] = None
 
-# --- Notes ---
+
 @router.get("/notes", response_model=List[Note])
 async def get_notes():
     cursor = notes_collection.find().sort("date", -1).limit(20)
@@ -42,16 +42,16 @@ async def get_notes():
 
 @router.post("/notes")
 async def add_note(note: Note):
-    # If ID not provided, generate? Frontend sends ID based on Date.now() usually
+    
     await notes_collection.insert_one(note.model_dump())
     return {"message": "Note added"}
 
-# --- Tasks ---
+
 @router.get("/tasks")
 async def get_tasks():
     cursor = tasks_collection.find()
     tasks = await cursor.to_list(length=100)
-    # Return as list, frontend maps by date
+    
     return tasks
 
 @router.post("/tasks")
@@ -59,11 +59,11 @@ async def add_task(task: Task):
     await tasks_collection.insert_one(task.model_dump())
     return {"message": "Task added"}
 
-# --- Subjects ---
+
 @router.get("/subjects", response_model=List[Subject])
 async def get_subjects(user: dict = Depends(get_current_user)):
     try:
-        # Filter by teacher_email
+        
         cursor = subjects_collection.find({"teacher_email": user["email"]})
         subs = await cursor.to_list(length=50)
         return subs
@@ -80,7 +80,7 @@ async def add_subject(sub: CreateSubject, user: dict = Depends(get_current_user)
         new_sub["completed_chapters"] = []
         new_sub["teacher_email"] = user["email"]
         await subjects_collection.insert_one(new_sub)
-        
+
         return new_sub
     except Exception as e:
         import traceback
@@ -99,7 +99,7 @@ async def delete_subject(sub_id: str, user: dict = Depends(get_current_user)):
 
 @router.post("/subjects/{sub_id}/progress")
 async def update_progress(sub_id: str, completed_chapters: List[int], user: dict = Depends(get_current_user)):
-    # Add user check to ensure ownership
+    
     result = await subjects_collection.update_one(
         {"id": sub_id, "teacher_email": user["email"]},
         {"$set": {"completed_chapters": completed_chapters}}

@@ -1,6 +1,6 @@
 
 export const SYLLABUS_DATA: Record<string, Record<string, string[]>> = {
-    // Primary School (Grades 1-5)
+    
     "1": {
         "Maths": ["Chapter 1: Shapes and Space", "Chapter 2: Numbers from One to Nine", "Chapter 3: Addition", "Chapter 4: Subtraction", "Chapter 5: Numbers from Ten to Twenty", "Chapter 6: Time", "Chapter 7: Measurement", "Chapter 8: Numbers from Twenty-one to Fifty", "Chapter 9: Data Handling", "Chapter 10: Patterns", "Chapter 11: Numbers", "Chapter 12: Money", "Chapter 13: How Many"],
         "English": ["Chapter 1: A Happy Child", "Chapter 2: Three Little Pigs", "Chapter 3: After a Bath", "Chapter 4: The Bubble, the Straw and the Shoe", "Chapter 5: One Little Kitten", "Chapter 6: Lalu and Peelu", "Chapter 7: Once I Saw a Little Bird", "Chapter 8: Mittu and the Yellow Mango", "Chapter 9: Merry-Go-Round", "Chapter 10: Circle"],
@@ -37,7 +37,7 @@ export const SYLLABUS_DATA: Record<string, Record<string, string[]>> = {
         "Hindi": ["Chapter 1: Rakh Ki Rassi", "Chapter 2: Faslon Ke Tyohar", "Chapter 3: Khilonewala", "Chapter 4: Nanha Fankar", "Chapter 5: Jahan Chah Wahan Rah", "Chapter 6: Chitthi Ka Safar", "Chapter 7: Dakie Ki Kahani, Kanwar Singh Ki Jubani", "Chapter 8: Ve Din Bhi Kya Din The", "Chapter 9: Ek Ma Ki Bebasi", "Chapter 10: Ek Din Ki Badshah"]
     },
 
-    // Middle School (Grades 6-8)
+    
     "6": {
         "Maths": ["Chapter 1: Knowing Our Numbers", "Chapter 2: Whole Numbers", "Chapter 3: Playing with Numbers", "Chapter 4: Basic Geometrical Ideas", "Chapter 5: Understanding Elementary Shapes", "Chapter 6: Integers", "Chapter 7: Fractions", "Chapter 8: Decimals", "Chapter 9: Data Handling", "Chapter 10: Mensuration", "Chapter 11: Algebra", "Chapter 12: Ratio and Proportion", "Chapter 13: Symmetry", "Chapter 14: Practical Geometry"],
         "Science": ["Chapter 1: Food: Where Does It Come From?", "Chapter 2: Components of Food", "Chapter 3: Fibre to Fabric", "Chapter 4: Sorting Materials into Groups", "Chapter 5: Separation of Substances", "Chapter 6: Changes Around Us", "Chapter 7: Getting to Know Plants", "Chapter 8: Body Movements", "Chapter 9: The Living Organisms and Their Surroundings", "Chapter 10: Motion and Measurement of Distances", "Chapter 11: Light, Shadows and Reflections", "Chapter 12: Electricity and Circuits", "Chapter 13: Fun with Magnets", "Chapter 14: Water", "Chapter 15: Air Around Us", "Chapter 16: Garbage In, Garbage Out"],
@@ -142,7 +142,7 @@ export const SYLLABUS_DATA: Record<string, Record<string, string[]>> = {
         ]
     },
 
-    // Secondary School (Grades 9-10)
+    
     "9": {
         "Maths": ["Chapter 1: Number Systems", "Chapter 2: Polynomials", "Chapter 3: Coordinate Geometry", "Chapter 4: Linear Equations in Two Variables", "Chapter 5: Introduction to Euclid's Geometry", "Chapter 6: Lines and Angles", "Chapter 7: Triangles", "Chapter 8: Quadrilaterals", "Chapter 9: Circles", "Chapter 10: Heron's Formula", "Chapter 11: Surface Areas and Volumes", "Chapter 12: Statistics"],
         "Science": ["Chapter 1: Matter in Our Surroundings", "Chapter 2: Is Matter Around Us Pure", "Chapter 3: Atoms and Molecules", "Chapter 4: Structure of the Atom", "Chapter 5: The Fundamental Unit of Life", "Chapter 6: Tissues", "Chapter 7: Motion", "Chapter 8: Force and Laws of Motion", "Chapter 9: Gravitation", "Chapter 10: Work and Energy", "Chapter 11: Sound", "Chapter 12: Improvement in Food Resources"],

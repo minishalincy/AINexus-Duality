@@ -18,7 +18,7 @@ export default function CalendarWidget() {
     const [newReminderTime, setNewReminderTime] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
-    // Initial Fetch
+    
     useEffect(() => {
         loadReminders();
     }, []);
@@ -34,14 +34,14 @@ export default function CalendarWidget() {
         }
     };
 
-    // Calendar Logic
+    
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Sun
+    const firstDayOfMonth = new Date(year, month, 1).getDay(); 
     const startDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
 
-    // Helper for safe local YYYY-MM-DD
+    
     const formatDateKey = (date: Date) => {
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -52,12 +52,12 @@ export default function CalendarWidget() {
     const handlePrevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
     const handleNextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
-    // Selection
-    // Fix: Use helper instead of toISOString() which shifts timezones
+    
+    
     const formattedSelectedDate = formatDateKey(selectedDate);
     const selectedReminders = reminders.filter(r => r.date === formattedSelectedDate);
 
-    // Add Reminder
+    
     const handleAddReminder = async () => {
         if (!newReminderText.trim()) return;
         setIsSaving(true);
@@ -79,7 +79,7 @@ export default function CalendarWidget() {
         }
     };
 
-    // Delete Reminder
+    
     const handleDelete = async (id: string) => {
         if (!confirm("Delete this reminder?")) return;
         try {
@@ -92,7 +92,7 @@ export default function CalendarWidget() {
 
     return (
         <div className="bg-white/40 border border-white/60 rounded-3xl p-6 shadow-md h-full flex flex-col md:flex-row lg:flex-col xl:flex-row gap-6">
-            {/* Left: Calendar Grid */}
+            { }
             <div className="flex-1">
                 <div className="flex items-center justify-between mb-4 bg-white/50 p-2 rounded-xl">
                     <button onClick={handlePrevMonth} className="p-1 hover:bg-white rounded-lg cursor-pointer"><ChevronLeft size={20} /></button>
@@ -115,8 +115,8 @@ export default function CalendarWidget() {
                     {Array.from({ length: daysInMonth }).map((_, i) => {
                         const day = i + 1;
                         const dObj = new Date(year, month, day);
-                        // Local timezone safe date string construction for comparison
-                        // (Simple approach: use YYYY-MM-DD from the loop)
+                        
+                        
                         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
                         const isToday = new Date().toDateString() === dObj.toDateString();
@@ -143,9 +143,9 @@ export default function CalendarWidget() {
                 </div>
             </div>
 
-            {/* Right: Task List */}
+            { }
             <div className="w-full md:w-48 lg:w-full xl:w-56 bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white border border-gray-100 rounded-2xl p-4 flex flex-col relative overflow-hidden shadow-sm">
-                {/* Gradient Overlay removed for white theme */}
+                { }
 
                 <div className="flex items-center justify-between mb-4 z-10">
                     <div>
@@ -160,7 +160,7 @@ export default function CalendarWidget() {
                     </button>
                 </div>
 
-                {/* Add Input Area */}
+                { }
                 {isAdding && (
                     <div className="mb-4 animate-in slide-in-from-top-2 z-10 space-y-2">
                         <input

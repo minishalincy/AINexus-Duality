@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import AddClassModal from "./AddClassModal";
 import { useTranslation } from "react-i18next";
 
-// Initial Dummy Data
+
 const INITIAL_SUBJECTS = [
     { id: "7a-science", grade: "7", section: "A", subject: "Science" },
     { id: "7a-maths", grade: "7", section: "A", subject: "Maths" },
@@ -20,7 +20,7 @@ export default function SubjectGrid() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleAddClass = (newClass: { grade: string, section: string, subjects: string[] }) => {
-        // Generate new cards for each subject
+        
         const newCards = newClass.subjects.map(sub => ({
             id: `${newClass.grade}${newClass.section}-${sub.toLowerCase()}-${Date.now()}`,
             grade: newClass.grade,
@@ -32,14 +32,14 @@ export default function SubjectGrid() {
 
     return (
         <div className="space-y-6">
-            {/* Grid */}
+            { }
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {subjects.map((sub) => (
                     <SubjectCard key={sub.id} {...sub} />
                 ))}
             </div>
 
-            {/* Add Button Area */}
+            { }
             <div className="flex justify-center">
                 <button
                     onClick={() => setIsModalOpen(true)}

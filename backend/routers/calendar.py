@@ -9,8 +9,8 @@ router = APIRouter()
 
 class Reminder(BaseModel):
     id: str
-    date: str # YYYY-MM-DD
-    time: Optional[str] = None # HH:MM
+    date: str 
+    time: Optional[str] = None 
     text: str
     teacher_email: Optional[str] = None
 
@@ -21,7 +21,7 @@ class CreateReminder(BaseModel):
 
 @router.get("/reminders", response_model=List[Reminder])
 async def get_reminders():
-    # user: dict = Depends(get_current_user)
+    
     try:
         cursor = reminders_collection.find({"teacher_email": "demo_teacher@school.com"})
         items = await cursor.to_list(length=100)
@@ -31,7 +31,7 @@ async def get_reminders():
 
 @router.post("/reminders", response_model=Reminder)
 async def add_reminder(data: CreateReminder):
-    # user: dict = Depends(get_current_user)
+    
     try:
         new_item = {
             "id": uuid.uuid4().hex,
@@ -48,7 +48,7 @@ async def add_reminder(data: CreateReminder):
 
 @router.delete("/reminders/{reminder_id}")
 async def delete_reminder(reminder_id: str):
-    # user: dict = Depends(get_current_user)
+    
     result = await reminders_collection.delete_one({"id": reminder_id, "teacher_email": "demo_teacher@school.com"})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Reminder not found")

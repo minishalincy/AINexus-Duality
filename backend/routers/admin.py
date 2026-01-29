@@ -17,12 +17,12 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 class AdminLoginSchema(BaseModel):
     email: EmailStr
     password: str
-    school: str # Admin selects school on login
+    school: str 
     preferred_language: str
 
 @router.post("/login", response_model=Token)
 async def login_admin(credentials: AdminLoginSchema):
-    # Verify Credentials against Env
+    
     if credentials.email != ADMIN_EMAIL or credentials.password != ADMIN_PASSWORD:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -30,25 +30,25 @@ async def login_admin(credentials: AdminLoginSchema):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Store Session in Admins Collection
+    
     new_session = AdminSessionModel(
         email=credentials.email,
         school=credentials.school,
         preferred_language=credentials.preferred_language
     )
-    
+
     await admin_collection.insert_one(new_session.model_dump(by_alias=True, exclude={"id"}))
 
-    # Create JWT
+    
     access_token_expires = timedelta(minutes=60)
     access_token = create_access_token(
-        data={"sub": credentials.email, "role": "admin", "school": credentials.school}, 
+        data={"sub": credentials.email, "role": "admin", "school": credentials.school},
         expires_delta=access_token_expires
     )
-    
+
     return {
-        "access_token": access_token, 
+        "access_token": access_token,
         "token_type": "bearer",
-        "preferred_language": credentials.preferred_language, # Or fetch from existing session if logic changes, but here we just used creds
+        "preferred_language": credentials.preferred_language, 
         "role": "admin"
     }

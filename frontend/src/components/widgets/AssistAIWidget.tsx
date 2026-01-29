@@ -5,7 +5,7 @@ import { Mic, Image as ImageIcon, Send, X, Loader2, ChevronDown, StopCircle } fr
 import { languages } from "@/lib/languages";
 import { useTranslation } from "react-i18next";
 
-// Web Speech API Types
+
 interface IWindow extends Window {
     webkitSpeechRecognition: any;
     SpeechRecognition: any;
@@ -23,14 +23,14 @@ export default function AssistAIWidget() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const recognitionRef = useRef<any>(null);
 
-    // Initialize Speech Recognition
+    
     useEffect(() => {
         const { webkitSpeechRecognition, SpeechRecognition } = window as unknown as IWindow;
         if (webkitSpeechRecognition || SpeechRecognition) {
             const SpeechRecognitionConstructor = SpeechRecognition || webkitSpeechRecognition;
             const recognition = new SpeechRecognitionConstructor();
-            recognition.continuous = true; // Keep listening until stopped
-            recognition.interimResults = true; // Show results while speaking
+            recognition.continuous = true; 
+            recognition.interimResults = true; 
 
             recognition.onresult = (event: any) => {
                 let finalTranscript = '';
@@ -38,15 +38,15 @@ export default function AssistAIWidget() {
                     if (event.results[i].isFinal) {
                         finalTranscript += event.results[i][0].transcript;
                     } else {
-                        // Optional: Handle interim results if we want real-time preview (append current input)
-                        // For simplicity, we mostly care about final, but we can update input continuously
+                        
+                        
                         setInput(prev => {
-                            // This is tricky with state updates. 
-                            // Better strategy: just replace input with latest transcript sequence or append?
-                            // User wants: "transcribed... shown in input box"
-                            // Simplest: Replace input with the full session transcript? 
-                            // Or just append. 
-                            // Let's just use the final results to append or replace.
+                            
+                            
+                            
+                            
+                            
+                            
                             return finalTranscript;
                         });
                     }
@@ -75,12 +75,12 @@ export default function AssistAIWidget() {
             setIsRecording(false);
         } else {
             if (recognitionRef.current) {
-                // Map lang code to BCP-47 (Approximate for Indian context)
+                
                 const langCode = selectedLang === 'en' ? 'en-US' : `${selectedLang}-IN`;
                 recognitionRef.current.lang = langCode;
                 recognitionRef.current.start();
                 setIsRecording(true);
-                if (!isOpen) setIsOpen(true); // Open chat if closed
+                if (!isOpen) setIsOpen(true); 
             } else {
                 alert("Speech recognition not supported in this browser.");
             }
@@ -91,7 +91,7 @@ export default function AssistAIWidget() {
         if (!text && !image) return;
         if (!isOpen) setIsOpen(true);
 
-        // Add user message
+        
         setMessages(prev => [...prev, { role: 'user', text: text || (image ? t('sent_image') : "") }]);
         setInput("");
         setLoading(true);
@@ -100,7 +100,7 @@ export default function AssistAIWidget() {
             const formData = new FormData();
             if (text) formData.append("message", text);
             if (image) formData.append("image", image);
-            formData.append("language", selectedLang); // Send selected language
+            formData.append("language", selectedLang); 
 
             const res = await fetch("/api/ai/chat", {
                 method: "POST",
@@ -135,7 +135,7 @@ export default function AssistAIWidget() {
     return (
         <>
             <div className="bg-white rounded-3xl p-6 shadow-md border border-gray-100 w-full mx-auto hover:shadow-lg transition-shadow duration-300">
-                {/* Input Bar */}
+                { }
                 <div
                     onClick={() => setIsOpen(true)}
                     className="bg-gradient-to-br from-[#0e2e72] to-[#3498db] text-white p-4 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-all mb-4"
@@ -146,7 +146,7 @@ export default function AssistAIWidget() {
                     <span className="text-lg">{t('message_placeholder')}</span>
                 </div>
 
-                {/* Buttons */}
+                { }
                 <div className="grid grid-cols-2 gap-4">
                     <button
                         onClick={toggleRecording}
@@ -164,7 +164,7 @@ export default function AssistAIWidget() {
                         className="bg-white border-2 border-gray-100 hover:border-primary-accent rounded-xl p-6 flex flex-col items-center justify-center gap-2 group transition-all cursor-pointer"
                     >
                         <div className="bg-white p-3 rounded-full border border-gray-200 group-hover:scale-110 transition-transform">
-                            {/* Colorful Icon */}
+                            { }
                             <div className="relative w-8 h-8">
                                 <ImageIcon size={32} className="text-primary-accent" />
                             </div>
@@ -181,12 +181,12 @@ export default function AssistAIWidget() {
                 </div>
             </div>
 
-            {/* Chat Overlay */}
+            { }
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <div className="bg-white w-full max-w-2xl h-[80vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 relative">
 
-                        {/* Header */}
+                        { }
                         <div className="bg-primary-dark text-white p-4 flex items-center justify-between z-10">
                             <h3 className="text-lg font-bold flex items-center gap-2">
                                 <span className="w-8 h-8 bg-primary-accent rounded-lg flex items-center justify-center">AI</span>
@@ -197,7 +197,7 @@ export default function AssistAIWidget() {
                             </button>
                         </div>
 
-                        {/* Wave Animation Overlay (When Recording) */}
+                        { }
                         {isRecording && (
                             <div className="absolute inset-x-0 top-16 z-20 bg-primary-50/90 backdrop-blur-sm p-4 flex items-center justify-center gap-2 animate-in slide-in-from-top-4 border-b border-primary-100">
                                 <div className="flex items-center gap-1 h-8">
@@ -212,8 +212,8 @@ export default function AssistAIWidget() {
                             </div>
                         )}
 
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-soft-bg/30 pb-24"> {/* Added padding bottom for input area */}
+                        { }
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-soft-bg/30 pb-24"> { }
                             {messages.length === 0 && (
                                 <div className="text-center text-gray-500 mt-10">
                                     <p>{t('ai_welcome_msg')}</p>
@@ -238,9 +238,9 @@ export default function AssistAIWidget() {
                             )}
                         </div>
 
-                        {/* Input Area */}
+                        { }
                         <div className="p-4 bg-white border-t border-gray-100">
-                            {/* Language Selector & Controls Row */}
+                            { }
                             <div className="flex items-center gap-2 mb-2">
                                 <div className="relative group">
                                     <select
@@ -255,7 +255,7 @@ export default function AssistAIWidget() {
                                     <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                                 </div>
 
-                                <div className="flex-1"></div> {/* Spacer */}
+                                <div className="flex-1"></div> { }
 
                                 <button
                                     onClick={toggleRecording}

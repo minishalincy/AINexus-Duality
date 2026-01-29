@@ -12,10 +12,10 @@ export default function GradeDetailPage({ params }: { params: Promise<{ gradeId:
     const resolvedParams = React.use(params);
     const gradeId = resolvedParams.gradeId as GradeLevel;
 
-    // Validate gradeId
+    
     const gradeInfo = GRADES.find(g => g.key === gradeId);
 
-    // Get videos for this grade
+    
     const videos = GRADE_VIDEO_DATA[gradeId] || [];
 
     if (!gradeInfo) {

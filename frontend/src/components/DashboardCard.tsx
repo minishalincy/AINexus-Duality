@@ -9,7 +9,7 @@ interface DashboardCardProps {
     href: string;
     description?: string;
     comingSoon?: boolean;
-    color?: string; // Tailwind bg class prefix e.g. 'bg-blue'
+    color?: string; 
 }
 
 export default function DashboardCard({ title, icon: Icon, href, description, comingSoon, color = 'bg-white' }: DashboardCardProps) {
@@ -21,11 +21,7 @@ export default function DashboardCard({ title, icon: Icon, href, description, co
                     <div className={`p-3 rounded-xl bg-gray-50 text-primary-600 group-hover:bg-primary-50 group-hover:text-primary-700 transition-colors`}>
                         <Icon className="w-8 h-8" />
                     </div>
-                    {/* {comingSoon && (
-                        <span className="px-2 py-1 text-xs font-semibold text-amber-700 bg-amber-50 rounded-full border border-amber-100">
-                            Soon
-                        </span>
-                    )} */}
+                    { }
                 </div>
 
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">
@@ -38,7 +34,7 @@ export default function DashboardCard({ title, icon: Icon, href, description, co
                     </p>
                 )}
 
-                {/* Decorative background circle */}
+                { }
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary-50 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500 blur-2xl"></div>
             </div>
         </Link>

@@ -28,14 +28,14 @@ export const GRADES: { key: GradeLevel; label: string; number: number }[] = [
     { key: 'grade8', label: 'Grade 8', number: 8 },
 ];
 
-// Video metadata interface
+
 export interface VideoMeta {
     id: string;
-    titleKey: string; // Key for translation
+    titleKey: string; 
     filename: string;
 }
 
-// Map categories to video lists
+
 export const TEACHER_VIDEO_DATA: Record<TeacherCategory, VideoMeta[]> = {
     'classroom-management': [
         { id: 'classroom-management', titleKey: 'classroom_management_video', filename: 'classroom_management.mp4' }
@@ -50,14 +50,14 @@ export const TEACHER_VIDEO_DATA: Record<TeacherCategory, VideoMeta[]> = {
         { id: 'teaching-improvement', titleKey: 'teaching_improvement_video', filename: 'teaching_improvement.mp4' }
     ],
     'reflection': [
-        { id: 'skills-management-ref', titleKey: 'skills_management_video', filename: 'skills_management.mp4' } // Based on file finding
+        { id: 'skills-management-ref', titleKey: 'skills_management_video', filename: 'skills_management.mp4' } 
     ],
     'skills-management': [
         { id: 'skills-management', titleKey: 'skills_management_video', filename: 'skills_management.mp4' }
     ],
 };
 
-// Map grades to video lists
+
 export const GRADE_VIDEO_DATA: Record<GradeLevel, VideoMeta[]> = {
     'grade1': [
         { id: 'basic-shapes', titleKey: 'basic_shapes', filename: 'basic_shapes.mp4' },
@@ -81,7 +81,7 @@ export const GRADE_VIDEO_DATA: Record<GradeLevel, VideoMeta[]> = {
     ],
     'grade6': [
         { id: 'integers', titleKey: 'integers', filename: 'integers.mp4' },
-        { id: 'ratios', titleKey: 'rations', filename: 'rations.mp4' } // Filename is rations.mp4
+        { id: 'ratios', titleKey: 'rations', filename: 'rations.mp4' } 
     ],
     'grade7': [
         { id: 'algebra', titleKey: 'algebra', filename: 'algebra.mp4' },
@@ -93,6 +93,6 @@ export const GRADE_VIDEO_DATA: Record<GradeLevel, VideoMeta[]> = {
     ],
 };
 
-// Helper to find video path
+
 export const getGradeVideoPath = (grade: GradeLevel, filename: string) => `/videos/grade-wise/${grade}/${filename}`;
 export const getTeacherVideoPath = (category: TeacherCategory, filename: string) => `/videos/teacher/${category}/${filename}`;

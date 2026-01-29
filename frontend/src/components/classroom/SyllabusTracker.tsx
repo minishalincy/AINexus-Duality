@@ -11,13 +11,13 @@ interface SyllabusTrackerProps {
 }
 
 export default function SyllabusTracker({ classroomId, initialCompletedChapters, syllabus = [], onUpdateProgress }: SyllabusTrackerProps) {
-    // Derived state to avoid direct setState in effect
+    
     const [completed, setCompleted] = useState<number[]>(initialCompletedChapters || []);
     
-    // Sync state if props change (important when switching classrooms)
+    
     useEffect(() => {
         setCompleted(initialCompletedChapters || []);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, [JSON.stringify(initialCompletedChapters), classroomId]);
 
     const toggleChapter = async (index: number) => {
@@ -34,7 +34,7 @@ export default function SyllabusTracker({ classroomId, initialCompletedChapters,
         if (onUpdateProgress) {
             onUpdateProgress(newCompleted);
         } else {
-            // Fallback: update directly if no callback provided
+            
             try {
                 await ClassroomService.updateProgress(classroomId, newCompleted);
             } catch (error) {
@@ -43,7 +43,7 @@ export default function SyllabusTracker({ classroomId, initialCompletedChapters,
         }
     };
 
-    // Safe guard against empty syllabus
+    
     if (!syllabus || syllabus.length === 0) {
         return (
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">

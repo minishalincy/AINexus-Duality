@@ -72,7 +72,7 @@ export default function TeacherRegister() {
                 throw new Error(data?.detail || 'Registration failed');
             }
 
-            // Store token and redirect
+            
             localStorage.setItem('token', data.access_token);
             localStorage.setItem('role', 'teacher');
             router.push('/dashboard');
@@ -86,7 +86,7 @@ export default function TeacherRegister() {
 
     return (
         <div className="min-h-screen flex bg-gray-50">
-            {/* Left Column - Branding */}
+            { }
             <motion.div
                 initial={{ x: -50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -101,7 +101,7 @@ export default function TeacherRegister() {
                 <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent_60%)]"></div>
             </motion.div>
 
-            {/* Right Column - Registration Form */}
+            { }
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 overflow-y-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

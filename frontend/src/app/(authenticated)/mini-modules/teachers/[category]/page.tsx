@@ -12,10 +12,10 @@ export default function TeacherCategoryPage({ params }: { params: Promise<{ cate
     const resolvedParams = React.use(params);
     const categoryId = resolvedParams.category as TeacherCategory;
 
-    // Validate category
+    
     const categoryInfo = TEACHER_CATEGORIES.find(c => c.key === categoryId);
 
-    // Get videos for this category
+    
     const videos = TEACHER_VIDEO_DATA[categoryId] || [];
 
     if (!categoryInfo) {

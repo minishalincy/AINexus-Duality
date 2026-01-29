@@ -18,7 +18,7 @@ class TeacherRegisterSchema(BaseModel):
 class TeacherLoginSchema(BaseModel):
     email: EmailStr
     password: str
-    school: Optional[str] = None # Optional for login check, but good if we enforce school match
+    school: Optional[str] = None 
 
 class TeacherProfileUpdateSchema(BaseModel):
     name: str
@@ -39,34 +39,34 @@ async def update_profile(
     teacher = await teacher_collection.find_one({"email": current_user["email"]})
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")
-    
+
     update_fields = {
         "name": update_data.name,
         "profile_picture": update_data.profile_picture
     }
+
     
-    # Only update fields that are provided
     update_fields = {k: v for k, v in update_fields.items() if v is not None}
 
     await teacher_collection.update_one(
         {"email": current_user["email"]},
         {"$set": update_fields}
     )
-    
+
     updated_teacher = await teacher_collection.find_one({"email": current_user["email"]})
     return updated_teacher
 
 @router.post("/register", response_model=Token)
 async def register_teacher(teacher: TeacherRegisterSchema):
-    # Check if teacher exists
+    
     existing_teacher = await teacher_collection.find_one({"email": teacher.email})
     if existing_teacher:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Hash password
-    hashed_password = get_password_hash(teacher.password)
     
-    # Create teacher document
+    hashed_password = get_password_hash(teacher.password)
+
+    
     new_teacher = TeacherModel(
         name=teacher.name,
         email=teacher.email,
@@ -74,16 +74,16 @@ async def register_teacher(teacher: TeacherRegisterSchema):
         school=teacher.school,
         preferred_language=teacher.preferred_language
     )
+
     
-    # Insert into DB
     result = await teacher_collection.insert_one(new_teacher.model_dump(by_alias=True, exclude={"id"}))
+
     
-    # Create JWT
     access_token_expires = timedelta(minutes=30)
     access_token = create_access_token(
         data={"sub": teacher.email, "role": "teacher"}, expires_delta=access_token_expires
     )
-    
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/login", response_model=Token)
@@ -95,15 +95,15 @@ async def login_teacher(credentials: TeacherLoginSchema):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     if not verify_password(credentials.password, teacher["password_hash"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     
-    # Optional: Verify school if passed
     if credentials.school and credentials.school != teacher["school"]:
          raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -116,8 +116,8 @@ async def login_teacher(credentials: TeacherLoginSchema):
         data={"sub": credentials.email, "role": "teacher"}, expires_delta=access_token_expires
     )
     return {
-        "access_token": access_token, 
-        "token_type": "bearer", 
+        "access_token": access_token,
+        "token_type": "bearer",
         "preferred_language": teacher.get("preferred_language", "en"),
         "role": "teacher"
     }

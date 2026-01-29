@@ -15,7 +15,7 @@ export interface CreateClassroomDTO {
     subject: string;
 }
 
-const API_Base = "/api/dashboard"; // Relative path to use proxy
+const API_Base = "/api/dashboard"; 
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
@@ -35,7 +35,7 @@ const isOffline = () => {
 
 export const ClassroomService = {
     async getClassrooms(): Promise<Classroom[]> {
-        // GET requests are handled by Service Worker caching (NetworkFirst/StaleWhileRevalidate)
+        
         const res = await fetch(`${API_Base}/subjects`, {
             headers: getHeaders()
         });
@@ -75,7 +75,7 @@ export const ClassroomService = {
                 console.log("Offline mode: Queueing addClassroom");
                 const tempId = `temp-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
                 await queueRequest(url, "POST", data, headers, tempId);
-                // Return optimistic result
+                
                 return {
                     id: tempId,
                     ...data,

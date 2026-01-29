@@ -1,5 +1,5 @@
 export const SYLLABUS_DATA: Record<string, { title: string, description: string }[]> = {
-    // Maths
+    
     "Maths-Basic": [
         { title: "Shapes and Space", description: "Understanding basic 2D shapes." },
         { title: "Numbers from One to Nine", description: "Counting and number recognition." },
@@ -22,7 +22,7 @@ export const SYLLABUS_DATA: Record<string, { title: string, description: string 
         { title: "Lines and Angles", description: "Geometry fundamentals." }
     ],
 
-    // Science
+    
     "Science-Basic": [
         { title: "What is around us?", description: "Living and non-living things." },
         { title: "Plants Types", description: "Herbs, shrubs, and trees." },
@@ -45,7 +45,7 @@ export const SYLLABUS_DATA: Record<string, { title: string, description: string 
         { title: "Electric Current and its Effects", description: "Circuits and symbols." }
     ],
 
-    // Default fallback
+    
     "Default": [
         { title: "Chapter 1", description: "Introduction to the subject." },
         { title: "Chapter 2", description: "Core concepts part 1." },

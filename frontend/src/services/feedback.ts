@@ -44,7 +44,7 @@ export const FeedbackService = {
 
         const res = await fetch(`${API_BASE}/analyze`, {
             method: "POST",
-            headers: getHeaders(), // No Content-Type for FormData
+            headers: getHeaders(), 
             body: formData
         });
         if (!res.ok) {

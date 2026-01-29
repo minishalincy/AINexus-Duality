@@ -11,7 +11,7 @@ interface AddClassModalProps {
     onAdd: (data: { grade: string; section: string; subjects: string[] }) => void;
 }
 
-// Predefined dataset mapping grades to subjects
+
 const GRADE_SUBJECTS: Record<string, string[]> = {
     "1": ["Maths", "English", "EVS", "Kannada", "Hindi"],
     "2": ["Maths", "English", "EVS", "Kannada", "Hindi"],
@@ -31,15 +31,15 @@ export default function AddClassModal({ isOpen, onClose, onAdd }: AddClassModalP
     const [section, setSection] = useState("");
     const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
     
-    // Derived state
+    
     const availableSubjects = grade && GRADE_SUBJECTS[grade] ? GRADE_SUBJECTS[grade] : [];
 
-    // Reset state when modal closes
+    
     useEffect(() => {
         if (!isOpen) {
-            // Only reset if fields are not already empty to avoid unnecessary renders/warnings
+            
             if (grade || section || selectedSubjects.length > 0) {
-                // eslint-disable-next-line
+                
                 setGrade("");
                 setSection("");
                 setSelectedSubjects([]);

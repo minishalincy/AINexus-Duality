@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Mic, StopCircle, CheckCircle, AlertCircle, Lightbulb, ArrowRight, ThumbsUp, ThumbsDown, BookOpen, Volume2 } from 'lucide-react';
 import TeacherNavbar from '@/components/TeacherNavbar';
 
-// Web Speech API Types
+
 interface SpeechRecognitionEvent extends Event {
     results: SpeechRecognitionResultList;
     resultIndex: number;
@@ -84,7 +84,7 @@ export default function DailyFeedback() {
             const form = new FormData();
             form.append("message", input);
             form.append("mode", "reflection");
-            // Extract language code
+            
             const langCode = LANG_MAP[selectedLanguage]?.split('-')[0] || 'en';
             form.append("language", langCode);
 
@@ -96,7 +96,7 @@ export default function DailyFeedback() {
             if (!res.ok) throw new Error("Failed");
             const data = await res.json();
 
-            // Allow time for "Delayed" simulation effect if needed, but for now instant
+            
             setTimeout(() => {
                 setResponse(data.reply);
                 setState('ready');
@@ -137,13 +137,13 @@ export default function DailyFeedback() {
 
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8 pt-24 text-center">
 
-                {/* Header */}
+                { }
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Daily Reflection</h1>
                     <p className="text-gray-500">Share your day in 1 minute to get personalized advice.</p>
                 </div>
 
-                {/* State 1: Input (Idle or Recording) */}
+                { }
                 {(state === 'idle' || state === 'recording') && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -159,7 +159,7 @@ export default function DailyFeedback() {
                         </div>
 
                         <div className="space-y-6">
-                            {/* Inputs */}
+                            { }
                             <textarea
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
@@ -203,7 +203,7 @@ export default function DailyFeedback() {
                     </motion.div>
                 )}
 
-                {/* State 2: Processing */}
+                { }
                 {state === 'processing' && (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -216,7 +216,7 @@ export default function DailyFeedback() {
                     </motion.div>
                 )}
 
-                {/* State 3: Ready Notification */}
+                { }
                 {state === 'ready' && !showFullResponse && (
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
@@ -238,25 +238,25 @@ export default function DailyFeedback() {
                     </motion.div>
                 )}
 
-                {/* State 4: Full Response View */}
+                { }
                 {showFullResponse && response && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="text-left max-w-3xl mx-auto space-y-6 pb-20"
                     >
-                        {/* TTS Control */}
+                        { }
                         <div className="flex justify-end mb-2">
                             <button
                                 onClick={() => {
                                     if (state === 'speaking') {
                                         window.speechSynthesis.cancel();
-                                        setState('ready'); // or 'viewing', but we used 'ready' + 'showFullResponse'
+                                        setState('ready'); 
                                     } else {
                                         const text = `${response.acknowledgement}. ${response.deep_dive}. ${response.quick_fix}. ${response.tomorrow_prep}. Pro tip: ${response.pro_tip}`;
                                         const utterance = new SpeechSynthesisUtterance(text);
-                                        // Try to match language if possible, else default
-                                        // utterance.lang = 'en-IN'; // or dynamic based on `selectedLanguage`
+                                        
+                                        
                                         utterance.onend = () => setState('ready');
                                         setState('speaking');
                                         window.speechSynthesis.speak(utterance);
@@ -276,7 +276,7 @@ export default function DailyFeedback() {
                             </button>
                         </div>
 
-                        {/* 1. Acknowledgement */}
+                        { }
                         <div className="bg-green-50 border border-green-100 rounded-xl p-6 flex items-start gap-4">
                             <div className="bg-white p-2 rounded-full shadow-sm">
                                 <span className="text-2xl">🎉</span>
@@ -287,7 +287,7 @@ export default function DailyFeedback() {
                             </div>
                         </div>
 
-                        {/* 2. Deep Dive */}
+                        { }
                         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                             <div className="flex items-center gap-2 mb-4">
                                 <BookOpen className="w-5 h-5 text-primary-600" />
@@ -297,7 +297,7 @@ export default function DailyFeedback() {
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
-                            {/* 3. Quick Fix */}
+                            { }
                             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                                 <div className="flex items-center gap-2 mb-3">
                                     <AlertCircle className="w-5 h-5 text-amber-500" />
@@ -306,7 +306,7 @@ export default function DailyFeedback() {
                                 <p className="text-gray-600 text-sm">{response.quick_fix}</p>
                             </div>
 
-                            {/* 4. Tomorrow Prep */}
+                            { }
                             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                                 <div className="flex items-center gap-2 mb-3">
                                     <ArrowRight className="w-5 h-5 text-blue-500" />
@@ -316,7 +316,7 @@ export default function DailyFeedback() {
                             </div>
                         </div>
 
-                        {/* Pro Tip */}
+                        { }
                         <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 flex items-center gap-4">
                             <Lightbulb className="w-6 h-6 text-indigo-600 shrink-0" />
                             <div>
@@ -325,7 +325,7 @@ export default function DailyFeedback() {
                             </div>
                         </div>
 
-                        {/* Action Buttons */}
+                        { }
                         <div className="flex justify-center gap-4 mt-8 pt-8 border-t border-gray-100">
                             <button className="flex items-center gap-2 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 font-medium">
                                 <ThumbsUp className="w-4 h-4" /> Got it, will try

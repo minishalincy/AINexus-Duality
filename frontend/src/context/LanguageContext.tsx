@@ -2,13 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { languages } from '@/lib/languages';
-import '@/lib/i18n/config'; // Init i18n
+import '@/lib/i18n/config'; 
 import { useTranslation } from 'react-i18next';
 
 type LanguageContextType = {
     language: string;
     setLanguage: (lang: string) => void;
-    t: (key: string) => string; // Placeholder for translation function
+    t: (key: string) => string; 
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -16,7 +16,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const { t, i18n } = useTranslation();
 
-    // Initialize state from localStorage if available (Client-side only)
+    
     const [language, setLanguageState] = useState('en');
     const [isInitialized, setIsInitialized] = useState(false);
 
@@ -41,9 +41,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         i18n.changeLanguage(lang);
     };
 
-    // Prevent rendering until language is initialized to avoid flash of wrong language (optional, but good for persistence checks)
-    // However, for verify we'll render anyway but with correct state.
-    // If we want to solve "it's English then English", we need to make sure we force 'ta' if localStorage says 'ta'.
+    
+    
+    
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage, t }}>

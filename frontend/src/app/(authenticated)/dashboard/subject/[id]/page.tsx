@@ -9,16 +9,16 @@ export default function SubjectDetailPage() {
     const params = useParams();
     const router = useRouter();
     const id = params.id as string;
-    // Parse ID: e.g., "7a-science-123456"
-    // Needs robust parsing
+    
+    
 
     const [completedChapters, setCompletedChapters] = useState<number[]>([]);
     const [showCelebration, setShowCelebration] = useState(false);
 
-    // Extract metadata from ID (mock logic matching the ID generation)
-    // Format: grade+section-subject-timestamp
-    // ex: 7A-science-123
-    // robust regex or split
+    
+    
+    
+    
     const parts = id.split('-');
     const gradeSection = parts[0] || "7A";
     const grade = parseInt(gradeSection.match(/\d+/)?.[0] || "7");
@@ -42,14 +42,14 @@ export default function SubjectDetailPage() {
 
     const triggerCelebration = () => {
         setShowCelebration(true);
-        // CSS-based simple confetti could be added here, or just UI feedback
+        
     };
 
     const progress = Math.round((completedChapters.length / syllabus.length) * 100);
 
     return (
         <div className="space-y-8">
-            {/* Header */}
+            { }
             <div className="flex items-center gap-4">
                 <button onClick={() => router.back()} className="p-2 bg-white rounded-full hover:bg-gray-100 shadow-sm">
                     <ArrowLeft size={24} className="text-primary-dark" />
@@ -60,7 +60,7 @@ export default function SubjectDetailPage() {
                 </div>
             </div>
 
-            {/* Progress Bar (Train Style) */}
+            { }
             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                 <div className="flex justify-between mb-2 font-bold text-secondary-dark">
                     <span>Progress</span>
@@ -71,7 +71,7 @@ export default function SubjectDetailPage() {
                         className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-accent to-green-400 transition-all duration-500 ease-out flex items-center justify-end px-2"
                         style={{ width: `${progress}%` }}
                     >
-                        {/* Train Icon or Dot */}
+                        { }
                         <div className="w-4 h-4 bg-white rounded-full shadow-md animate-pulse"></div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ export default function SubjectDetailPage() {
                 )}
             </div>
 
-            {/* Syllabus List */}
+            { }
             <div className="grid gap-4">
                 {syllabus.map((chapter, index) => {
                     const isCompleted = completedChapters.includes(index);

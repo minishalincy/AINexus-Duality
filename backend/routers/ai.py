@@ -17,7 +17,7 @@ router = APIRouter()
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 HF_KEY = os.getenv("HF_API_KEY")
 
-# Initialize Gemini Client
+
 client = None
 if GEMINI_KEY:
     try:
@@ -27,7 +27,7 @@ if GEMINI_KEY:
 else:
     print("Warning: GEMINI_API_KEY not found in env")
 
-# Prompts
+
 SYSTEM_PROMPT = """
 AI Teaching Assistant (Instant Classroom Help)
 
@@ -48,7 +48,7 @@ Example Output:
 🎒 Activity: Have a student slide a book on the smooth desk (easy), then slide it on a rough bag (hard).
 """
 
-# ... (rest of file until chat function end)
+
 
 
 REFLECTION_SYSTEM_PROMPT = """
@@ -65,7 +65,7 @@ Tone: Encouraging, practical, and concise.
 IMPORTANT: The values in the JSON must be in the SAME LANGUAGE as the user's input.
 """
 
-# Translation Config
+
 HF_HEADERS = {"Authorization": f"Bearer {HF_KEY}"}
 
 LANG_MAP = {
@@ -89,7 +89,7 @@ def translate(text, model, src_lang, tgt_lang):
             "tgt_lang": tgt_lang
         }
     }
-    
+
     try:
         r = requests.post(url, headers=HF_HEADERS, json=payload, timeout=60)
         data = r.json()
@@ -103,7 +103,7 @@ def translate(text, model, src_lang, tgt_lang):
         print(f"Translation Exception: {e}")
         return text
 
-# Legacy functions preserved if needed, but not used in main flow anymore
+
 def to_english(text, lang):
     if lang == "en":
         return text
@@ -129,7 +129,7 @@ def translate_json(data, lang):
 
 @router.post("/chat")
 async def chat(
-    message: Optional[str] = Form(None), 
+    message: Optional[str] = Form(None),
     image: Optional[UploadFile] = File(None),
     language: Optional[str] = Form("en"),
     mode: Optional[str] = Form("chat")
@@ -141,13 +141,13 @@ async def chat(
         if not message and not image:
             return {"reply": "Please provide a message or an image."}
 
-        # 1. Determine Language Name for Prompting
+        
         lang_code = language if language in LANG_NAMES else "en"
         lang_name = LANG_NAMES.get(lang_code, "English")
+
         
-        # 2. Prepare Content
         chat_content = []
-        
+
         if mode == "reflection":
             chat_content.append(REFLECTION_SYSTEM_PROMPT)
             chat_content.append(f"User Language Preference: {lang_name}")
@@ -167,7 +167,7 @@ async def chat(
             except Exception as e:
                 print(f"Image processing error: {e}")
 
-        # 3. Generate Content
+        
         config = None
         if mode == "reflection":
             config = types.GenerateContentConfig(
@@ -179,19 +179,19 @@ async def chat(
             contents=chat_content,
             config=config
         )
+
         
-        # 4. Process Response
         generated_text = response.text.strip()
 
         if mode == "reflection":
             try:
-                # Gemini usually respects the JSON instruction, but in the requested language
+                
                 json_response = json.loads(generated_text)
                 return {"reply": json_response, "type": "json"}
             except json.JSONDecodeError:
                 return {"reply": {"acknowledgement": generated_text}, "type": "json"}
         else:
-            # Direct response (multilingual by default now)
+            
             return {"reply": generated_text, "type": "text"}
 
     except Exception as e:

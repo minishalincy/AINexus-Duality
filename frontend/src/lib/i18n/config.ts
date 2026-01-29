@@ -32,7 +32,7 @@ i18n
             pa: { translation: pa },
             as: { translation: as },
         },
-        // lng: 'en', // Removed to allow dynamic change
+        
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false,
