@@ -4,37 +4,37 @@
 
 Assist AI is a comprehensive digital platform designed to support teachers in government schools by providing AI-driven tools, classroom management resources, and professional development modules—all accessible in their local language.
 
-## 🌟 Core Features
+##  Core Features
 
-### 1. 🤖 Multilingual AI Assistant
+### 1.  Multilingual AI Assistant
 -   **Voice & Text Interaction**: Teachers can speak or type in their native language.
 -   **Real-time AI**: Powered by Google Gemini 2.0 Flash for instant lesson planning, doubt resolution, and resource generation.
 -   **12+ Indian Languages**: Seamless translation and interaction in Hindi, Kannada, Tamil, Telugu, and more.
 
-### 2. 📝 Smart Feedback & Reflection
+### 2. Smart Feedback & Reflection
 -   **AI Analysis**: Teachers can input their daily classroom experiences.
 -   **Structured Feedback**: The AI analyzes inputs to provide:
-    -   ✅ Good Things (Accomplishments)
-    -   ⚠️ Areas of Concern
-    -   💡 Improvement Suggestions
+    -    Good Things (Accomplishments)
+    -    Areas of Concern
+    -    Improvement Suggestions
 -   **Retry Logic**: One-click re-analysis for simplified bullet points if strict clarity is needed.
 
-### 3. 📅 Smart Calendar & Notifications
+### 3.  Smart Calendar & Notifications
 -   **Integrated Planner**: Manage classroom schedules and reminders.
 -   **Time-Aware Notifications**: Real-time banners and badge alerts that trigger *exactly* when a task is due.
 -   **Visual Updates**: Dynamic red badge counts for pending tasks.
 
-### 4. 📚 Mini Modules & Resources
+### 4.  Mini Modules & Resources
 -   **Professional Development**: Curated video content for teacher training (Classroom Management, Stress Management, etc.).
 -   **Grade-Wise Content**: subject-specific modules for students (Grades 1-10).
 
-### 5. 🌍 Inclusive Design
+### 5.  Inclusive Design
 -   **Simple UI**: Glassmorphism design tailored for ease of use.
 -   **Accessibility**: High contrast text, clear icons, and intuitive navigation.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 -   **Frontend**: [Next.js 16](https://nextjs.org/) (React, TypeScript), Tailwind CSS.
 -   **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python), Uvicorn.
@@ -44,7 +44,7 @@ Assist AI is a comprehensive digital platform designed to support teachers in go
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to set up the project locally.
 
@@ -106,7 +106,7 @@ npm run dev
 
 ---
 
-## 📸 Usage Flow
+##  Usage Flow
 
 1.  **Register/Login**: Sign up as a Teacher.
 2.  **Dashboard**: You will land on the Dashboard with access to Calendar, Feedback info, and Quick Actions.
@@ -116,4 +116,4 @@ npm run dev
 
 ---
 
-Made with ❤️ for Education.
+
