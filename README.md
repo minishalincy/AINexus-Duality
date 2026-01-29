@@ -1,4 +1,4 @@
-# 🎓 Assist AI - Teacher's Digital Companion
+# Assist AI - Teacher's Digital Companion
 
 **Empowering Government School Teachers with AI & Native Language Support.**
 
