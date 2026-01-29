@@ -116,9 +116,6 @@ npm run dev
 
 ---
 
-
----
-
 ## 📸 Application Screenshots
 
 <div align="center">
